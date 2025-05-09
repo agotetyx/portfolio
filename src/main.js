@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000010); // space-like background
+scene.background = new THREE.Color(0x000010);
 
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -18,6 +18,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
 const orbit = new OrbitControls(camera, renderer.domElement);
+orbit.enableDamping = true;
+orbit.dampingFactor = 0.1;
 orbit.update();
 
 const ambientLight = new THREE.AmbientLight(0x333333);
@@ -100,32 +102,96 @@ const project7 = createProject('project7', 7, 0x66ffff, 176, {
 const project8 = createProject('project8', 7, 0x9999ff, 200);
 const project9 = createProject('project9', 2.8, 0xffffff, 216);
 
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+const labelDiv = document.createElement('div');
+labelDiv.style.position = 'absolute';
+labelDiv.style.color = 'white';
+labelDiv.style.fontSize = '16px';
+labelDiv.style.padding = '6px 10px';
+labelDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+labelDiv.style.borderRadius = '6px';
+labelDiv.style.pointerEvents = 'none';
+labelDiv.style.maxWidth = '300px';
+labelDiv.style.textAlign = 'left';
+labelDiv.style.lineHeight = '1.4';
+document.body.appendChild(labelDiv);
+
+let focusedProject = null;
+let paused = false;
+
+window.addEventListener('click', (event) => {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects([
+    project1.mesh,
+    project2.mesh,
+    project3.mesh,
+    project4.mesh,
+    project5.mesh,
+    project6.mesh,
+    project7.mesh,
+    project8.mesh,
+    project9.mesh
+  ]);
+
+  if (intersects.length > 0) {
+    focusedProject = intersects[0].object;
+    paused = true;
+    const target = focusedProject.getWorldPosition(new THREE.Vector3());
+    orbit.target.copy(target.clone());
+    camera.position.copy(target.clone().add(new THREE.Vector3(-20, 5, 20)));
+    orbit.update();
+  }
+});
+
+window.addEventListener('wheel', () => {
+  if (paused) paused = false;
+});
+
+window.addEventListener('mousedown', () => {
+  if (paused) paused = false;
+});
+
 function animate() {
   requestAnimationFrame(animate);
 
-  // Self-rotation
-  sun.rotateY(0.004);
-  project1.mesh.rotateY(0.004);
-  project2.mesh.rotateY(0.002);
-  project3.mesh.rotateY(0.02);
-  project4.mesh.rotateY(0.018);
-  project5.mesh.rotateY(0.04);
-  project6.mesh.rotateY(0.038);
-  project7.mesh.rotateY(0.03);
-  project8.mesh.rotateY(0.032);
-  project9.mesh.rotateY(0.008);
+  if (!paused) {
+    sun.rotateY(0.004);
+    project1.mesh.rotateY(0.004);
+    project2.mesh.rotateY(0.002);
+    project3.mesh.rotateY(0.02);
+    project4.mesh.rotateY(0.018);
+    project5.mesh.rotateY(0.04);
+    project6.mesh.rotateY(0.038);
+    project7.mesh.rotateY(0.03);
+    project8.mesh.rotateY(0.032);
+    project9.mesh.rotateY(0.008);
 
-  // Orbital rotation
-  project1.obj.rotateY(0.04);
-  project2.obj.rotateY(0.015);
-  project3.obj.rotateY(0.01);
-  project4.obj.rotateY(0.008);
-  project5.obj.rotateY(0.002);
-  project6.obj.rotateY(0.0009);
-  project7.obj.rotateY(0.0004);
-  project8.obj.rotateY(0.0001);
-  project9.obj.rotateY(0.00007);
+    project1.obj.rotateY(0.04);
+    project2.obj.rotateY(0.015);
+    project3.obj.rotateY(0.01);
+    project4.obj.rotateY(0.008);
+    project5.obj.rotateY(0.002);
+    project6.obj.rotateY(0.0009);
+    project7.obj.rotateY(0.0004);
+    project8.obj.rotateY(0.0001);
+    project9.obj.rotateY(0.00007);
+  }
 
+  if (focusedProject && paused) {
+    const pos = focusedProject.getWorldPosition(new THREE.Vector3()).clone();
+    pos.project(camera);
+    labelDiv.style.left = `${(2 / 3) * window.innerWidth}px`;
+    labelDiv.style.top = `${(-pos.y * 0.5 + 0.5) * window.innerHeight - 40}px`;
+    labelDiv.innerText = `${focusedProject.name.toUpperCase()}\nTech Stack: TBD\nDescription: Lorem ipsum dolor sit amet.`;
+  } else {
+    labelDiv.innerText = '';
+  }
+
+  orbit.update();
   renderer.render(scene, camera);
 }
 
