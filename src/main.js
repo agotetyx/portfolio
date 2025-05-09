@@ -119,6 +119,8 @@ document.body.appendChild(labelDiv);
 
 let focusedProject = null;
 let paused = false;
+let cameraTargetPosition = null;
+let orbitTargetPosition = null;
 
 window.addEventListener('click', (event) => {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -140,18 +142,19 @@ window.addEventListener('click', (event) => {
   if (intersects.length > 0) {
     focusedProject = intersects[0].object;
     paused = true;
+
     const target = focusedProject.getWorldPosition(new THREE.Vector3());
-    orbit.target.copy(target.clone());
-    camera.position.copy(target.clone().add(new THREE.Vector3(-20, 5, 20)));
-    orbit.update();
+    orbitTargetPosition = target.clone();
+    cameraTargetPosition = target.clone().add(new THREE.Vector3(-20, 5, 20));
   }
 });
 
-window.addEventListener('wheel', () => {
+
+window.addEventListener('mousedown', () => {
   if (paused) paused = false;
 });
 
-window.addEventListener('mousedown', () => {
+window.addEventListener('wheel', () => {
   if (paused) paused = false;
 });
 
@@ -181,12 +184,23 @@ function animate() {
     project9.obj.rotateY(0.00007);
   }
 
+  if (orbitTargetPosition && cameraTargetPosition) {
+    orbit.target.lerp(orbitTargetPosition, 0.05);
+    camera.position.lerp(cameraTargetPosition, 0.05);
+    if (camera.position.distanceTo(cameraTargetPosition) < 0.1) {
+      orbitTargetPosition = null;
+      cameraTargetPosition = null;
+    }
+  }
+
   if (focusedProject && paused) {
     const pos = focusedProject.getWorldPosition(new THREE.Vector3()).clone();
     pos.project(camera);
     labelDiv.style.left = `${(2 / 3) * window.innerWidth}px`;
     labelDiv.style.top = `${(-pos.y * 0.5 + 0.5) * window.innerHeight - 40}px`;
-    labelDiv.innerText = `${focusedProject.name.toUpperCase()}\nTech Stack: TBD\nDescription: Lorem ipsum dolor sit amet.`;
+    labelDiv.innerText = `${focusedProject.name.toUpperCase()}
+Tech Stack: TBD
+Description: Lorem ipsum dolor sit amet.`;
   } else {
     labelDiv.innerText = '';
   }
