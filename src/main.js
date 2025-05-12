@@ -160,7 +160,14 @@ window.addEventListener('mousemove', (event) => {
 
   const intersects = raycaster.intersectObjects(projects.map(p => p.mesh), true);
   if (intersects.length > 0) {
-    const current = intersects[0].object;
+    let current = intersects[0].object;
+
+// Traverse upward to find the parent tracked in projects
+while (current && !projects.find(p => p.mesh === current)) {
+  current = current.parent;
+}
+if (!current) return; // exit if no matching parent
+
     hoverTarget = current;
     timeScale = 0.2;
 
