@@ -2,6 +2,10 @@ import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+
 
 const scene = new THREE.Scene();
 scene.background = new THREE.TextureLoader().load('images/spacetexture.jpg');
@@ -12,6 +16,18 @@ camera.position.setZ(30);
 const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg') });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  1.5, // strength
+  0.4, // radius
+  0.85 // threshold
+);
+composer.addPass(bloomPass);
+
 
 const orbit = new OrbitControls(camera, renderer.domElement);
 orbit.enableDamping = true;
@@ -187,7 +203,7 @@ if (!current) return; // exit if no matching parent
 
     labelDiv.style.left = `${x}px`;
     labelDiv.style.top = `${y - 40}px`;
-    labelDiv.innerText = `${current.name?.toUpperCase() || 'PROJECT'}\nTech Stack: TBD\nDescription: Hovered project`;
+    labelDiv.innerText = `${current.name?.toUpperCase() || 'PROJECT'}`;
   } else {
     timeScale = 1.0;
     hoverTarget = null;
@@ -222,6 +238,8 @@ function animate() {
   }
 
   orbit.update();
-  renderer.render(scene, camera);
+  //renderer.render(scene, camera);
+  composer.render();
+
 }
 animate();
