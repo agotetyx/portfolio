@@ -79,3 +79,179 @@ canvas {
   .left {
     grid-column: 6 / 12;
   }
+
+  #infoPanel {
+  position: fixed;
+  top: 0;
+  right: -100%; /* hide off-screen initially */
+  width: 33.33vw;
+  height: 100vh;
+  background: #111;
+  color: white;
+  padding: 2rem;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+  transition: right 0.4s ease;
+  z-index: 100;
+  overflow-y: auto;
+  
+}
+
+#infoPanel img {
+  width: 100%;
+  margin: 1rem 0;
+  border-radius: 10px;
+  object-fit: cover;
+  max-height: 200px;
+}
+
+.panel-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.panel-buttons button {
+  flex: 1;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background: #444;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.panel-buttons button:hover {
+  background: #666;
+}
+#closePanelBtn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+#closePanelBtn:hover {
+  color: #aaa;
+}
+
+#introText {
+  position: fixed;
+  top: 3%;
+ left: 3%;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+  text-align: left;
+  color: white;
+  transition: opacity 2s ease;
+  font-family: 'elevon', sans-serif;
+  pointer-events: none;
+}
+
+#introText h1 {
+  font-size: 7rem;
+  margin: 0;
+}
+
+#introText p {
+  font-size: 3rem;
+  margin-top: 1rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+  
+}
+#introText p2 {
+  font-size: 1.8rem;
+  margin-top: 0;
+  font-weight: 300;
+  
+}
+
+#infoToggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ffffff11;
+  border: 1px solid #888;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  z-index: 300;
+  transition: background 0.3s ease;
+}
+
+#infoToggle:hover {
+  background: #ffffff33;
+}
+
+#infoPanelMini {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  width: 200px;
+  background: #111;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  z-index: 299;
+  font-size: 0.95rem;
+  line-height: 1.6;
+
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#infoPanelMini.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+#infoPanelMini a {
+  color: #88ccff;
+  text-decoration: none;
+}
+
+#infoPanelMini a:hover {
+  text-decoration: underline;
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+}
+
+.social-links a {
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #88ccff;
+}
+
+.resume-link {
+  color: #88ccff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.resume-link:hover {
+  text-decoration: underline;
+}

@@ -5,12 +5,53 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
+
+    <!-- Font Awesome for social icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
   </head>
+
   <body>
-    
+
     <canvas id="bg"></canvas>
 
-    
+    <!-- Intro Text (top-left corner) -->
+    <div id="introText">
+      <h1>I am Anurag Gotety</h1>
+      <p>Welcome to my universe</p>
+      <p2 style="font-style: italic; opacity: 0.8;">Click any object to begin.</p2>
+    </div>
+
+    <!-- Hamburger toggle -->
+    <div id="infoToggle">&#9776;</div>
+
+    <!-- Social Panel (hamburger menu) -->
+    <div id="infoPanelMini">
+      <p><strong>Connect with me</strong></p>
+      <div class="social-links">
+        <a href="https://linkedin.com/in/anurag-gotety" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="mailto:anurag10gotety@gmail.com"><i class="fas fa-envelope"></i></a>
+        <a href="https://www.youtube.com/@yourchannel" target="_blank"><i class="fab fa-youtube"></i></a>
+        <a href="https://instagram.com/yourhandle" target="_blank"><i class="fab fa-instagram"></i></a>
+      </div>
+      <a href="Anurag_Gotety_Resume.pdf" download class="resume-link">Download Resume</a>
+    </div>
+
+    <!-- Info Panel for clicked project -->
+    <div id="infoPanel">
+      <button id="closePanelBtn">← Back</button>
+      <h2 id="panelTitle">Project bitch</h2>
+      <p id="panelSubtitle">Short description line.</p>
+      <img id="panelImage" src="" alt="Project image" />
+      <p id="panelDescription">Longer paragraph about the project...</p>
+      <div class="panel-buttons">
+        <button id="seeMoreBtn">See More</button>
+        <button id="playGameBtn">Play Game</button>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
