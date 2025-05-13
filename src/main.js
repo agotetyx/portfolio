@@ -23,7 +23,7 @@ composer.addPass(new RenderPass(scene, camera));
 const bloomPass = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight),
   1.5, // strength
-  0.4, // radius
+  0.2, // radius
   0.85 // threshold
 );
 composer.addPass(bloomPass);
@@ -34,7 +34,7 @@ orbit.enableDamping = true;
 orbit.dampingFactor = 0.1;
 
 scene.add(new THREE.AmbientLight(0xffffff, 5));
-scene.add(new THREE.PointLight(0xffffff, 25, 250, 0.0005));
+scene.add(new THREE.PointLight(0xffffff, 10, 250, 0.0005));
 
 const projects = [];
 
@@ -49,19 +49,30 @@ function addStar() {
 Array(400).fill().forEach(addStar);
 
 // SUN
-const outerCube = new THREE.Mesh(
-  new THREE.BoxGeometry(10, 10, 10),
-  new THREE.MeshBasicMaterial({ color: 0xffcc00, wireframe: true, transparent: true, opacity: 0.8 })
-);
-const innerCube = new THREE.Mesh(
-  new THREE.BoxGeometry(4, 4, 4),
-  new THREE.MeshBasicMaterial({ color: 0xffcc00, wireframe: true, transparent: true, opacity: 0.8 })
-);
-const sun = new THREE.Object3D();
-sun.add(outerCube);
-sun.add(innerCube);
-sun.position.set(0, 0, 0);
-scene.add(sun);
+const gltfLoader = new GLTFLoader();
+let sun; // Replace global `sun` reference
+
+gltfLoader.load('/3d objects/blackhole/scene.gltf', (gltf) => {
+  sun = gltf.scene;
+  sun.scale.set(7, 7, 7);
+  sun.position.set(0, 0, 0);
+
+  // Center it if needed
+  const box = new THREE.Box3().setFromObject(sun);
+  const center = box.getCenter(new THREE.Vector3());
+  sun.position.sub(center);
+
+  // 👇 Prevent bloom by forcing to layer 0 only
+  sun.traverse((child) => {
+  if (child.isMesh) {
+    child.material.emissive = new THREE.Color(0x000000); // no glow
+    child.material.emissiveIntensity = 0;
+  }
+});
+
+  scene.add(sun);
+});
+
 
 // Load and wrap a GLTF model with orbital logic
 function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
@@ -75,6 +86,8 @@ function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
       const box = new THREE.Box3().setFromObject(model);
       const center = box.getCenter(new THREE.Vector3());
       model.position.sub(center);
+
+      model.rotation.y = Math.PI;
       model.position.x = orbitRadius;
 
       const orbitWrapper = new THREE.Object3D();
@@ -95,8 +108,11 @@ function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
 }
 
 // Load projects
-loadGLTFProject("ARDI", "/3d objects/iphone_16_pro_max/scene.gltf", 28, 4, 0.006).then(p => projects.push(p));
-loadGLTFProject("My Films", "/3d objects/old_vintage_film_camera/scene.gltf", 62, 0.2, 0.003).then(p => projects.push(p));
+loadGLTFProject("ARDI", "/3d objects/iphone_16_pro_max/scene.gltf", 30, 6, 0.006).then(p => projects.push(p));
+loadGLTFProject("My Films", "/3d objects/old_vintage_film_camera/scene.gltf", 60, 0.25, 0.003).then(p => projects.push(p));
+loadGLTFProject("Portal Defender", "/3d objects/controller/controller.glb", 80, 8, 0.0015).then(p => projects.push(p));
+loadGLTFProject("Yaoshi", "/3d objects/controller/controller.glb", 100, 8, 0.0005).then(p => projects.push(p));
+loadGLTFProject("Erin and the Otherworld", "/3d objects/controller/controller.glb", 120, 8, 0.0001).then(p => projects.push(p));
 
 // Hover + Click interaction
 const raycaster = new THREE.Raycaster();
@@ -192,8 +208,8 @@ if (!current) return; // exit if no matching parent
     }
 
     if (current.material?.emissive) {
-      current.material.emissive.copy(current.material.color);
-      current.material.emissiveIntensity = 1.75;
+      current.material.emissive.setRGB(1, 1, 1);
+      current.material.emissiveIntensity = 175;
     }
 
     lastHoveredProject = current;
@@ -243,3 +259,9 @@ function animate() {
 
 }
 animate();
+setTimeout(() => {
+  const intro = document.getElementById('introText');
+  intro.style.opacity = 0;
+  setTimeout(() => intro.remove(), 2000); // remove from DOM after fade-out
+}, 30000); // 60,000 ms = 1 min
+
