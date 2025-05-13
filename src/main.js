@@ -59,7 +59,7 @@ Array(400).fill().forEach(addStar);
 const gltfLoader = new GLTFLoader();
 let sun; // Replace global `sun` reference
 
-gltfLoader.load('/3d objects/blackhole/scene.gltf', (gltf) => {
+gltfLoader.load('/3d-objects/blackhole/scene.gltf', (gltf) => {
   sun = gltf.scene;
   sun.scale.set(7, 7, 7);
   sun.position.set(0, 0, 0);
@@ -115,11 +115,11 @@ function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
 }
 
 // Load projects
-loadGLTFProject("ARDI", "/3d objects/iphone_16_pro_max/scene.gltf", 30, 6, 0.006).then(p => projects.push(p));
-loadGLTFProject("My Films", "/3d objects/old_vintage_film_camera/scene.gltf", 60, 0.25, 0.003).then(p => projects.push(p));
-loadGLTFProject("Portal Defender", "/3d objects/controller/controller.glb", 80, 8, 0.0015).then(p => projects.push(p));
-loadGLTFProject("Yaoshi", "/3d objects/controller/controller.glb", 100, 8, 0.0005).then(p => projects.push(p));
-loadGLTFProject("Erin and the Otherworld", "/3d objects/controller/controller.glb", 120, 8, 0.0001).then(p => projects.push(p));
+loadGLTFProject("ARDI", "/3d-objects/iphone_16_pro_max/scene.gltf", 30, 6, 0.006).then(p => projects.push(p));
+loadGLTFProject("My Films", "/3d-objects/old_vintage_film_camera/scene.gltf", 60, 0.25, 0.003).then(p => projects.push(p));
+loadGLTFProject("Portal Defender", "/3d-objects/controller/controller.glb", 80, 8, 0.0015).then(p => projects.push(p));
+loadGLTFProject("Yaoshi", "/3d-objects/controller/controller.glb", 100, 8, 0.0005).then(p => projects.push(p));
+loadGLTFProject("Erin and the Otherworld", "/3d-objects/controller/controller.glb", 120, 8, 0.0001).then(p => projects.push(p));
 
 // Hover + Click interaction
 const raycaster = new THREE.Raycaster();
