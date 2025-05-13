@@ -5,6 +5,11 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { RectAreaLight } from 'three';
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js';
+
+let hoverLight = null;
+let hoverHelper = null;
 
 
 const scene = new THREE.Scene();
@@ -34,7 +39,9 @@ orbit.enableDamping = true;
 orbit.dampingFactor = 0.1;
 
 scene.add(new THREE.AmbientLight(0xffffff, 5));
-scene.add(new THREE.PointLight(0xffffff, 10, 250, 0.0005));
+const pointLight = new THREE.PointLight(0xffffff, 10, 250, 0.0005);
+pointLight.position.y = 0;
+scene.add(pointLight);
 
 const projects = [];
 
@@ -183,6 +190,11 @@ document.getElementById('closePanelBtn').addEventListener('click', () => {
 ['mousedown', 'wheel'].forEach(event =>
   window.addEventListener(event, () => { if (paused) paused = false; })
 );
+const hoverSpotlight = new THREE.SpotLight(0x00ccff, 500, 100, Math.PI / 3, 0.5, 1);
+hoverSpotlight.castShadow = false;
+hoverSpotlight.visible = false; // initially hidden
+scene.add(hoverSpotlight);
+scene.add(hoverSpotlight.target);
 
 // Hover
 window.addEventListener('mousemove', (event) => {
@@ -192,43 +204,53 @@ window.addEventListener('mousemove', (event) => {
 
   const intersects = raycaster.intersectObjects(projects.map(p => p.mesh), true);
   if (intersects.length > 0) {
-    let current = intersects[0].object;
-
-// Traverse upward to find the parent tracked in projects
-while (current && !projects.find(p => p.mesh === current)) {
-  current = current.parent;
-}
-if (!current) return; // exit if no matching parent
-
-    hoverTarget = current;
-    timeScale = 0.2;
-
-    if (lastHoveredProject && lastHoveredProject !== current && lastHoveredProject.material?.emissive) {
-      lastHoveredProject.material.emissiveIntensity = 0;
-    }
-
-    if (current.material?.emissive) {
-      current.material.emissive.setRGB(1, 1, 1);
-      current.material.emissiveIntensity = 175;
-    }
-
-    lastHoveredProject = current;
-    const pos = current.getWorldPosition(new THREE.Vector3()).clone().project(camera);
-    const x = (pos.x * 0.5 + 0.5) * window.innerWidth;
-    const y = (-pos.y * 0.5 + 0.5) * window.innerHeight;
-
-    labelDiv.style.left = `${x}px`;
-    labelDiv.style.top = `${y - 40}px`;
-    labelDiv.innerText = `${current.name?.toUpperCase() || 'PROJECT'}`;
-  } else {
-    timeScale = 1.0;
-    hoverTarget = null;
-    labelDiv.innerText = '';
-    if (lastHoveredProject?.material?.emissive) {
-      lastHoveredProject.material.emissiveIntensity = 0;
-      lastHoveredProject = null;
-    }
+  let current = intersects[0].object;
+  while (current && !projects.find(p => p.mesh === current)) {
+    current = current.parent;
   }
+  if (!current) return;
+
+  hoverTarget = current;
+  timeScale = 0.2;
+
+  // Emissive glow
+  if (lastHoveredProject && lastHoveredProject !== current && lastHoveredProject.material?.emissive) {
+    lastHoveredProject.material.emissiveIntensity = 0;
+  }
+
+  if (current.material?.emissive) {
+    current.material.emissive.setRGB(1, 1, 1);
+    current.material.emissiveIntensity = 1.75;
+  }
+
+  // Spotlight
+  const pos = current.getWorldPosition(new THREE.Vector3());
+  hoverSpotlight.visible = true;
+  hoverSpotlight.position.set(pos.x, pos.y + 10, pos.z + 10);
+  hoverSpotlight.target.position.copy(pos);
+
+  lastHoveredProject = current;
+
+  // Label
+  const screenPos = intersects[0].object.getWorldPosition(new THREE.Vector3()).clone().project(camera);
+  const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
+  const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
+
+  labelDiv.style.left = `${x}px`;
+  labelDiv.style.top = `${y - 40}px`;
+  labelDiv.innerText = `${current.name?.toUpperCase() || 'PROJECT'}`;
+} else {
+  timeScale = 1.0;
+  hoverTarget = null;
+  labelDiv.innerText = '';
+  hoverSpotlight.visible = false;
+
+  if (lastHoveredProject?.material?.emissive) {
+    lastHoveredProject.material.emissiveIntensity = 0;
+    lastHoveredProject = null;
+  }
+}
+
 });
 
 // Animation loop
