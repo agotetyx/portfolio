@@ -5,11 +5,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { RectAreaLight } from 'three';
-import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js';
 
 let hoverLight = null;
 let hoverHelper = null;
+let sunHoverLight = null;
 
 
 const scene = new THREE.Scene();
@@ -59,26 +58,33 @@ Array(400).fill().forEach(addStar);
 const gltfLoader = new GLTFLoader();
 let sun; // Replace global `sun` reference
 
-gltfLoader.load('/3d-objects/blackhole/scene.gltf', (gltf) => {
+gltfLoader.load('http://localhost:3001/3dobjects/blackhole/scene.gltf', (gltf) => {
   sun = gltf.scene;
+  sun.name = "Anurag Gotety"; // Set name to match JSON title
   sun.scale.set(7, 7, 7);
-  sun.position.set(0, 0, 0);
 
-  // Center it if needed
   const box = new THREE.Box3().setFromObject(sun);
   const center = box.getCenter(new THREE.Vector3());
   sun.position.sub(center);
+  sun.position.y = -1.5;
 
-  // 👇 Prevent bloom by forcing to layer 0 only
   sun.traverse((child) => {
-  if (child.isMesh) {
-    child.material.emissive = new THREE.Color(0x000000); // no glow
-    child.material.emissiveIntensity = 0;
-  }
+    if (child.isMesh) {
+      child.material.emissive = new THREE.Color(0x000000);
+      child.material.emissiveIntensity = 0;
+    }
+  });
+
+  // ✅ Wrap in a parent object for click detection
+  const sunWrapper = new THREE.Object3D();
+  sunWrapper.name = "Anurag Gotety"; // Must match title in anurag.json
+  sunWrapper.add(sun);
+  scene.add(sunWrapper);
+
+  // ✅ Store reference to wrapper for click logic
+  window.sunWrapper = sunWrapper;
 });
 
-  scene.add(sun);
-});
 
 
 // Load and wrap a GLTF model with orbital logic
@@ -115,11 +121,11 @@ function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
 }
 
 // Load projects
-loadGLTFProject("ARDI", "/3d-objects/iphone_16_pro_max/scene.gltf", 30, 6, 0.006).then(p => projects.push(p));
-loadGLTFProject("My Films", "/3d-objects/old_vintage_film_camera/scene.gltf", 60, 0.25, 0.003).then(p => projects.push(p));
-loadGLTFProject("Portal Defender", "/3d-objects/controller/controller.glb", 80, 8, 0.0015).then(p => projects.push(p));
-loadGLTFProject("Yaoshi", "/3d-objects/controller/controller.glb", 100, 8, 0.0005).then(p => projects.push(p));
-loadGLTFProject("Erin and the Otherworld", "/3d-objects/controller/controller.glb", 120, 8, 0.0001).then(p => projects.push(p));
+loadGLTFProject("ARDI", "http://localhost:3001/3dobjects/iphone_16_pro_max/scene.gltf", 30, 6, 0.006).then(p => projects.push(p));
+loadGLTFProject("My Films", "http://localhost:3001/3dobjects/old_vintage_film_camera/scene.gltf", 60, 0.25, 0.003).then(p => projects.push(p));
+loadGLTFProject("Portal Defender", "http://localhost:3001/3dobjects/controller/controller.glb", 80, 8, 0.0015).then(p => projects.push(p));
+loadGLTFProject("Yaoshi", "http://localhost:3001/3dobjects/controller/controller.glb", 100, 8, 0.0005).then(p => projects.push(p));
+loadGLTFProject("Erin and the Otherworld", "http://localhost:3001/3dobjects/controller/controller.glb", 120, 8, 0.0001).then(p => projects.push(p));
 
 // Hover + Click interaction
 const raycaster = new THREE.Raycaster();
@@ -148,36 +154,52 @@ window.addEventListener('click', async (event) => {
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
 
-  const intersects = raycaster.intersectObjects(projects.map(p => p.mesh), true);
-  if (intersects.length > 0) {
-    let obj = intersects[0].object;
-    while (obj && !projects.find(p => p.mesh === obj)) {
-      obj = obj.parent;
-    }
-    if (!obj) return;
+  const intersects = raycaster.intersectObjects([
+    ...projects.map(p => p.mesh),
+    window.sunWrapper
+  ], true);
 
-    focusedProject = obj;
-    paused = true;
+  if (intersects.length === 0) return;
 
-    const res = await fetch('http://localhost:3001/api/projects');
-    const projectData = await res.json();
-    const match = projectData.find(p => p.title === obj.name);
+  let obj = intersects[0].object;
 
-    if (match) {
-      document.getElementById('panelTitle').textContent = match.title;
-      document.getElementById('panelSubtitle').textContent = match.short;
-      document.getElementById('panelImage').src = `http://localhost:3001${match.images[0] || ''}`;
-      document.getElementById('panelDescription').textContent = match.long;
-      document.getElementById('seeMoreBtn').textContent = match.button1 || 'See More';
-      document.getElementById('playGameBtn').textContent = match.button2 || 'Play Game';
-    }
-
-    const target = obj.getWorldPosition(new THREE.Vector3());
-    orbitTargetPosition = target.clone();
-    cameraTargetPosition = target.clone().add(new THREE.Vector3(-20, 5, 20));
-    document.getElementById('infoPanel').style.right = '0';
+  // Climb up to find a named wrapper object or known mesh
+  while (
+    obj &&
+    !projects.find(p => p.mesh === obj) &&
+    obj !== window.sunWrapper
+  ) {
+    obj = obj.parent;
   }
+
+  if (!obj) return;
+
+  focusedProject = obj;
+  paused = true;
+
+  const res = await fetch('http://localhost:3001/api/projects');
+  const projectData = await res.json();
+
+  // Handle blackhole (Anurag card)
+  const match = (obj === window.sunWrapper)
+    ? projectData.find(p => p.title === "Anurag Gotety")
+    : projectData.find(p => p.title === obj.name);
+
+  if (match) {
+    document.getElementById('panelTitle').textContent = match.title;
+    document.getElementById('panelSubtitle').textContent = match.short;
+    document.getElementById('panelImage').src = `http://localhost:3001${match.images[0] || ''}`;
+    document.getElementById('panelDescription').textContent = match.long;
+    document.getElementById('seeMoreBtn').textContent = match.button1 || 'See More';
+    document.getElementById('playGameBtn').textContent = match.button2 || 'Play Game';
+  }
+
+  const target = obj.getWorldPosition(new THREE.Vector3());
+  orbitTargetPosition = target.clone();
+  cameraTargetPosition = target.clone().add(new THREE.Vector3(-20, 5, 20));
+  document.getElementById('infoPanel').style.right = '0';
 });
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     document.getElementById('infoPanel').style.right = '-100%';
@@ -190,11 +212,17 @@ document.getElementById('closePanelBtn').addEventListener('click', () => {
 ['mousedown', 'wheel'].forEach(event =>
   window.addEventListener(event, () => { if (paused) paused = false; })
 );
-const hoverSpotlight = new THREE.SpotLight(0x00ccff, 500, 100, Math.PI / 3, 0.5, 1);
+const hoverSpotlight = new THREE.SpotLight(0xffdd66, 300, 50, Math.PI / 3, 0.5, 1);
 hoverSpotlight.castShadow = false;
 hoverSpotlight.visible = false; // initially hidden
 scene.add(hoverSpotlight);
 scene.add(hoverSpotlight.target);
+
+const sunSpotlight = new THREE.SpotLight(0x3399ff, 200, 800, Math.PI / 4, 0, 1);
+sunSpotlight.visible = false;
+scene.add(sunSpotlight);
+scene.add(sunSpotlight.target);
+
 
 // Hover
 window.addEventListener('mousemove', (event) => {
@@ -202,60 +230,98 @@ window.addEventListener('mousemove', (event) => {
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
 
-  const intersects = raycaster.intersectObjects(projects.map(p => p.mesh), true);
+  const hoverTargets = [
+    ...projects.map(p => p.mesh),
+    window.sunWrapper
+  ];
+
+  const intersects = raycaster.intersectObjects(hoverTargets, true);
+
   if (intersects.length > 0) {
-  let current = intersects[0].object;
-  while (current && !projects.find(p => p.mesh === current)) {
-    current = current.parent;
+    let current = intersects[0].object;
+
+    while (
+      current &&
+      !projects.find(p => p.mesh === current) &&
+      current !== window.sunWrapper
+    ) {
+      current = current.parent;
+    }
+
+    if (!current) return;
+
+    hoverTarget = current;
+
+    // Reset previous emissive
+    if (
+      lastHoveredProject &&
+      lastHoveredProject !== current &&
+      lastHoveredProject.material?.emissive
+    ) {
+      lastHoveredProject.material.emissiveIntensity = 0;
+    }
+
+    // Determine if sun or a project
+    if (current === window.sunWrapper) {
+      timeScale = 0.2;
+
+      // 🔵 Blue spotlight for sun
+      const sunPos = current.getWorldPosition(new THREE.Vector3());
+      sunSpotlight.visible = true;
+      sunSpotlight.position.set(sunPos.x, sunPos.y + 10, sunPos.z + 10);
+      sunSpotlight.target.position.copy(sunPos);
+
+      hoverSpotlight.visible = false; // Disable yellow spotlight
+
+    } else {
+      timeScale = 0.2;
+
+      // ✨ Glow effect
+      if (current.material?.emissive) {
+        current.material.emissive.setRGB(1, 1, 1);
+        current.material.emissiveIntensity = 1.75;
+      }
+
+      // 🟡 Yellow spotlight
+      const pos = current.getWorldPosition(new THREE.Vector3());
+      hoverSpotlight.visible = true;
+      hoverSpotlight.position.set(pos.x, pos.y + 10, pos.z + 10);
+      hoverSpotlight.target.position.copy(pos);
+
+      sunSpotlight.visible = false; // Disable blue spotlight
+    }
+
+    lastHoveredProject = current;
+
+    // 🏷️ Label
+    const screenPos = current.getWorldPosition(new THREE.Vector3()).project(camera);
+    const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
+    const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
+
+    labelDiv.style.left = `${x}px`;
+    labelDiv.style.top = `${y - 40}px`;
+    labelDiv.innerText = current.name?.toUpperCase() || 'PROJECT';
+
+  } else {
+    // Reset when not hovering
+    timeScale = 1.0;
+    hoverTarget = null;
+    labelDiv.innerText = '';
+    hoverSpotlight.visible = false;
+    sunSpotlight.visible = false;
+
+    if (lastHoveredProject?.material?.emissive) {
+      lastHoveredProject.material.emissiveIntensity = 0;
+      lastHoveredProject = null;
+    }
   }
-  if (!current) return;
-
-  hoverTarget = current;
-  timeScale = 0.2;
-
-  // Emissive glow
-  if (lastHoveredProject && lastHoveredProject !== current && lastHoveredProject.material?.emissive) {
-    lastHoveredProject.material.emissiveIntensity = 0;
-  }
-
-  if (current.material?.emissive) {
-    current.material.emissive.setRGB(1, 1, 1);
-    current.material.emissiveIntensity = 1.75;
-  }
-
-  // Spotlight
-  const pos = current.getWorldPosition(new THREE.Vector3());
-  hoverSpotlight.visible = true;
-  hoverSpotlight.position.set(pos.x, pos.y + 10, pos.z + 10);
-  hoverSpotlight.target.position.copy(pos);
-
-  lastHoveredProject = current;
-
-  // Label
-  const screenPos = intersects[0].object.getWorldPosition(new THREE.Vector3()).clone().project(camera);
-  const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
-  const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
-
-  labelDiv.style.left = `${x}px`;
-  labelDiv.style.top = `${y - 40}px`;
-  labelDiv.innerText = `${current.name?.toUpperCase() || 'PROJECT'}`;
-} else {
-  timeScale = 1.0;
-  hoverTarget = null;
-  labelDiv.innerText = '';
-  hoverSpotlight.visible = false;
-
-  if (lastHoveredProject?.material?.emissive) {
-    lastHoveredProject.material.emissiveIntensity = 0;
-    lastHoveredProject = null;
-  }
-}
-
 });
+
 
 // Animation loop
 function animate() {
   requestAnimationFrame(animate);
+
   time += 0.01 * timeScale;
 
   if (!paused) {
@@ -280,10 +346,19 @@ function animate() {
   composer.render();
 
 }
-animate();
+const infoToggle = document.getElementById('infoToggle');
+const infoPanelMini = document.getElementById('infoPanelMini');
+
+infoToggle.addEventListener('click', () => {
+  infoPanelMini.classList.toggle('show');
+});
+
 setTimeout(() => {
   const intro = document.getElementById('introText');
   intro.style.opacity = 0;
   setTimeout(() => intro.remove(), 2000); // remove from DOM after fade-out
-}, 30000); // 60,000 ms = 1 min
+}, 60000); // 60,000 ms = 1 min
+
+animate();
+
 

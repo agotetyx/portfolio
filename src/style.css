@@ -86,7 +86,8 @@ canvas {
   right: -100%; /* hide off-screen initially */
   width: 33.33vw;
   height: 100vh;
-  background: #111;
+  background: rgba(17, 17, 17, 0.75);
+
   color: white;
   padding: 2rem;
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
