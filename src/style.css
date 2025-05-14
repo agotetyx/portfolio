@@ -87,7 +87,6 @@ canvas {
   width: 33.33vw;
   height: 100vh;
   background: rgba(17, 17, 17, 0.75);
-
   color: white;
   padding: 2rem;
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
@@ -149,29 +148,62 @@ canvas {
   z-index: 200;
   text-align: left;
   color: white;
-  transition: opacity 2s ease;
   font-family: 'elevon', sans-serif;
   pointer-events: none;
 }
 
-#introText h1 {
-  font-size: 6vw;
-  margin: 0;
-}
 
 #introText p {
   font-size: 3vw;
   margin-top: 1rem;
   font-weight: 300;
   margin-bottom: 1rem;
+  transition: opacity 2s ease;
   
 }
 #introText p2 {
   font-size: 1.5vw;
   margin-top: 0;
   font-weight: 300;
+  transition: opacity 2s ease;
   
 }
+#introNameWrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 6vw;
+  font-weight: bold;
+  
+}
+#nameTitle {
+  display: inline-block;
+  font-size: 6vw;
+  transition: transform 1.5s ease, font-size 1.5s ease;
+  padding-left: 0;
+}
+
+/* Animate to smaller size and shifted position */
+#nameTitle.animate-to-final {
+  font-size: 4.2vw; /* ~30% smaller */
+  transform: translateX(-15vw); /* shift left */
+}
+#logoFade {
+  width: 150px;
+  height: auto;
+  opacity: 0;
+  display: none;
+  transition: opacity 2s ease;
+  padding-right: 1%;
+
+}
+
+#namePrefix {
+  margin-right: 0.5rem;
+  opacity: 1;
+  transition: opacity 2s ease;
+}
+
 
 #infoToggle {
   position: fixed;
@@ -229,42 +261,6 @@ canvas {
 
 #infoPanelMini a:hover {
   text-decoration: underline;
-}
-
-#introNameWrap {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 6vw;
-  font-weight: bold;
-  transition: opacity 2s ease;
-}
-#nameTitle {
-  display: inline-block;
-  font-size: 6vw;
-  transition: transform 1.5s ease, font-size 1.5s ease;
-  padding-left: 0;
-}
-
-/* Animate to smaller size and shifted position */
-#nameTitle.animate-to-final {
-  font-size: 4.2vw; /* ~30% smaller */
-  transform: translateX(-15vw); /* shift left */
-}
-#logoFade {
-  width: 150px;
-  height: auto;
-  opacity: 0;
-  display: none;
-  transition: opacity 2s ease;
-  padding-right: 1%;
-
-}
-
-#namePrefix {
-  margin-right: 0.5rem;
-  opacity: 1;
-  transition: opacity 1.5s ease;
 }
 
 
