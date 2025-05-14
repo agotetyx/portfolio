@@ -386,8 +386,7 @@ setTimeout(() => {
   const p2 = document.getElementById('#introText p2');
 
   prefix.style.opacity = 0;
-  p.style.opacity = 0;
-  p2.style.opacity = 0;
+  
 
 
   // Animate name + reveal logo
@@ -396,6 +395,8 @@ setTimeout(() => {
     requestAnimationFrame(() => {
       logo.style.opacity = 1;
       name.classList.add('animate-to-final');
+      p.style.opacity = 0;
+  p2.style.opacity = 0;
     });
   }, 1500);
 }, 3000);
