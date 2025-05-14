@@ -392,7 +392,7 @@ setTimeout(() => {
       logo.style.opacity = 1;
     });
   }, 1500);
-}, 30000);
+}, 3000);
 
 animate();
 
