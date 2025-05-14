@@ -186,7 +186,7 @@ canvas {
 /* Animate to smaller size and shifted position */
 #nameTitle.animate-to-final {
   font-size: 4vw; /* ~30% smaller */
-  transform: translateX(-5vw); /* shift left */
+  transform: translateX(-11vw); /* shift left */
 }
 #logoFade {
   width: 150px;
