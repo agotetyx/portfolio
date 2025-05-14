@@ -371,9 +371,28 @@ infoToggle.addEventListener('click', () => {
 
 setTimeout(() => {
   const intro = document.getElementById('introText');
-  intro.style.opacity = 0;
-  setTimeout(() => intro.remove(), 2000); // remove from DOM after fade-out
-}, 60000); // 60,000 ms = 1 min
+  const logo = document.getElementById('logoFade');
+  const prefix = document.getElementById('namePrefix');
+  const children = Array.from(intro.children);
+
+  // Fade out all text elements except the name wrap
+  children.forEach(child => {
+    if (child.id !== 'introNameWrap') {
+      child.style.opacity = 0;
+    }
+  });
+
+  // Fade out "I am"
+  prefix.style.opacity = 0;
+
+  // Fade in logo after "I am" fades out
+  setTimeout(() => {
+    logo.style.display = 'block';
+    requestAnimationFrame(() => {
+      logo.style.opacity = 1;
+    });
+  }, 1500);
+}, 30000);
 
 animate();
 
