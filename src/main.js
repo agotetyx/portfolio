@@ -9,10 +9,11 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 let hoverLight = null;
 let hoverHelper = null;
 let sunHoverLight = null;
+const api = 'https://portfolio-backend-huz3.onrender.com';
 
 
 const scene = new THREE.Scene();
-scene.background = new THREE.TextureLoader().load('images/spacetexture.jpg');
+scene.background = new THREE.TextureLoader().load(`${api}/images/spacetexture.jpg`);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.setZ(30);
@@ -58,7 +59,7 @@ Array(400).fill().forEach(addStar);
 const gltfLoader = new GLTFLoader();
 let sun; // Replace global `sun` reference
 
-gltfLoader.load('http://localhost:3001/3dobjects/blackhole/scene.gltf', (gltf) => {
+gltfLoader.load(`${api}/3dobjects/blackhole/scene.gltf`, (gltf) => {
   sun = gltf.scene;
   sun.name = "Anurag Gotety"; // Set name to match JSON title
   sun.scale.set(7, 7, 7);
@@ -121,11 +122,11 @@ function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
 }
 
 // Load projects
-loadGLTFProject("ARDI", "http://localhost:3001/3dobjects/iphone_16_pro_max/scene.gltf", 30, 6, 0.006).then(p => projects.push(p));
-loadGLTFProject("My Films", "http://localhost:3001/3dobjects/old_vintage_film_camera/scene.gltf", 60, 0.25, 0.003).then(p => projects.push(p));
-loadGLTFProject("Portal Defender", "http://localhost:3001/3dobjects/controller/controller.glb", 80, 8, 0.0015).then(p => projects.push(p));
-loadGLTFProject("Yaoshi", "http://localhost:3001/3dobjects/controller/controller.glb", 100, 8, 0.0005).then(p => projects.push(p));
-loadGLTFProject("Erin and the Otherworld", "http://localhost:3001/3dobjects/controller/controller.glb", 120, 8, 0.0001).then(p => projects.push(p));
+loadGLTFProject("ARDI", `${api}/3dobjects/iphone_16_pro_max/scene.gltf`, 30, 6, 0.006).then(p => projects.push(p));
+loadGLTFProject("My Films", `${api}/3dobjects/old_vintage_film_camera/scene.gltf`, 60, 0.25, 0.003).then(p => projects.push(p));
+loadGLTFProject("Portal Defender", `${api}/3dobjects/controller/controller.glb`, 80, 8, 0.0015).then(p => projects.push(p));
+loadGLTFProject("Yaoshi", `${api}/3dobjects/controller/controller.glb`, 100, 8, 0.0005).then(p => projects.push(p));
+loadGLTFProject("Erin and the Otherworld", `${api}/3dobjects/controller/controller.glb`, 120, 8, 0.0001).then(p => projects.push(p));
 
 // Hover + Click interaction
 const raycaster = new THREE.Raycaster();
@@ -177,7 +178,7 @@ window.addEventListener('click', async (event) => {
   focusedProject = obj;
   paused = true;
 
-  const res = await fetch('http://localhost:3001/api/projects');
+  const res = await fetch(`${api}/api/projects`);
   const projectData = await res.json();
 
   // Handle blackhole (Anurag card)
@@ -188,10 +189,25 @@ window.addEventListener('click', async (event) => {
   if (match) {
     document.getElementById('panelTitle').textContent = match.title;
     document.getElementById('panelSubtitle').textContent = match.short;
-    document.getElementById('panelImage').src = `http://localhost:3001${match.images[0] || ''}`;
-    document.getElementById('panelDescription').textContent = match.long;
-    document.getElementById('seeMoreBtn').textContent = match.button1 || 'See More';
-    document.getElementById('playGameBtn').textContent = match.button2 || 'Play Game';
+    document.getElementById('panelImage').src = `${api}/images/${match.images?.[0] || ''}`;
+document.getElementById('panelDescription').textContent = match.long;
+    const btn1 = document.getElementById('seeMoreBtn');
+const btn2 = document.getElementById('playGameBtn');
+
+btn1.textContent = match.button1 || 'See More';
+btn2.textContent = match.button2 || 'Play Game';
+
+btn1.style.display = match.button1Link ? 'inline-block' : 'none';
+btn2.style.display = match.button2Link ? 'inline-block' : 'none';
+
+btn1.onclick = () => {
+  if (match.button1Link) window.open(match.button1Link, '_blank');
+};
+
+btn2.onclick = () => {
+  if (match.button2Link) window.open(match.button2Link, '_blank');
+};
+
   }
 
   const target = obj.getWorldPosition(new THREE.Vector3());
@@ -261,14 +277,14 @@ window.addEventListener('mousemove', (event) => {
       lastHoveredProject.material.emissiveIntensity = 0;
     }
 
-    // Determine if sun or a project
+    // Determine if sun or a projecthe
     if (current === window.sunWrapper) {
       timeScale = 0.2;
 
       // 🔵 Blue spotlight for sun
       const sunPos = current.getWorldPosition(new THREE.Vector3());
       sunSpotlight.visible = true;
-      sunSpotlight.position.set(sunPos.x, sunPos.y + 10, sunPos.z + 10);
+      sunSpotlight.position.set(sunPos.x, sunPos.y+20, sunPos.z);
       sunSpotlight.target.position.copy(sunPos);
 
       hoverSpotlight.visible = false; // Disable yellow spotlight
@@ -277,10 +293,10 @@ window.addEventListener('mousemove', (event) => {
       timeScale = 0.2;
 
       // ✨ Glow effect
-      if (current.material?.emissive) {
+      /*if (current.material?.emissive) {
         current.material.emissive.setRGB(1, 1, 1);
         current.material.emissiveIntensity = 1.75;
-      }
+      }*/
 
       // 🟡 Yellow spotlight
       const pos = current.getWorldPosition(new THREE.Vector3());

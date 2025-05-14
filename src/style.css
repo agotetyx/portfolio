@@ -155,19 +155,19 @@ canvas {
 }
 
 #introText h1 {
-  font-size: 7rem;
+  font-size: 6vw;
   margin: 0;
 }
 
 #introText p {
-  font-size: 3rem;
+  font-size: 3vw;
   margin-top: 1rem;
   font-weight: 300;
   margin-bottom: 1rem;
   
 }
 #introText p2 {
-  font-size: 1.8rem;
+  font-size: 1.5vw;
   margin-top: 0;
   font-weight: 300;
   
