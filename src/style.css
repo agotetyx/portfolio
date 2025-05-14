@@ -172,7 +172,6 @@ canvas {
   display: flex;
   align-items: center;
   gap: 1rem;
-  
   font-weight: bold;
   
 }
@@ -185,16 +184,17 @@ canvas {
 
 /* Animate to smaller size and shifted position */
 #nameTitle.animate-to-final {
-  font-size: 4vw; /* ~30% smaller */
-  transform: translateX(-11vw); /* shift left */
+  font-size: 3.8vw; /* ~30% smaller */
+  transform: translateX(-14.5vw); /* shift left */
 }
 #logoFade {
-  width: 150px;
+  width: 120px;
   height: auto;
   opacity: 0;
   display: none;
   transition: opacity 2s ease;
-  padding-right: 1%;
+  padding-right: 0.2%;
+  margin-left: -2.5%;
 
 }
 
