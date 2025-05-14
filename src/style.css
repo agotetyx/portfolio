@@ -240,12 +240,12 @@ canvas {
   transition: opacity 2s ease;
 }
 #introNameWrap.animate-left {
-  transform: translateX(-20vw);
+  transform: translateX(200vw);
   transition: transform 1.5s ease;
 }
 
 #logoFade {
-  width: 90px;
+  width: 150px;
   height: auto;
   opacity: 0;
   display: none;
