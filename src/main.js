@@ -381,17 +381,14 @@ setTimeout(() => {
   const logo = document.getElementById('logoFade');
   const prefix = document.getElementById('namePrefix');
   const name = document.getElementById('nameTitle');
-  const children = Array.from(intro.children);
+  const pTags = document.querySelectorAll('#introText p, #introText p2');
+  const p = document.getElementById('#introText p');
+  const p2 = document.getElementById('#introText p2');
 
-  // Fade out everything but name/logo
-  children.forEach(child => {
-    if (child.id !== 'introNameWrap') {
-      child.style.opacity = 0;
-    }
-  });
-
-  // Fade out prefix
   prefix.style.opacity = 0;
+  p.style.opacity = 0;
+  p2.style.opacity = 0;
+
 
   // Animate name + reveal logo
   setTimeout(() => {
