@@ -239,17 +239,26 @@ canvas {
   font-weight: bold;
   transition: opacity 2s ease;
 }
-#introNameWrap.animate-left {
-  transform: translateX(200vw);
-  transition: transform 1.5s ease;
+#nameTitle {
+  display: inline-block;
+  font-size: 6vw;
+  transition: transform 1.5s ease, font-size 1.5s ease;
+  padding-left: 0;
 }
 
+/* Animate to smaller size and shifted position */
+#nameTitle.animate-to-final {
+  font-size: 4.2vw; /* ~30% smaller */
+  transform: translateX(-15vw); /* shift left */
+}
 #logoFade {
   width: 150px;
   height: auto;
   opacity: 0;
   display: none;
   transition: opacity 2s ease;
+  padding-right: 1%;
+
 }
 
 #namePrefix {

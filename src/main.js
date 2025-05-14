@@ -314,12 +314,19 @@ window.addEventListener('mousemove', (event) => {
     const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
     const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
 
-    labelDiv.style.left = `${x}px`;
-    labelDiv.style.top = `${y - 40}px`;
-    labelDiv.innerText = current.name?.toUpperCase() || 'PROJECT';
+    if (current.name && current.name.trim() !== '') {
+  labelDiv.style.left = `${x}px`;
+  labelDiv.style.top = `${y - 40}px`;
+  labelDiv.innerText = current.name.toUpperCase();
+  labelDiv.style.display = 'block';
+} else {
+  labelDiv.style.display = 'none';
+}
 
   } else {
     // Reset when not hovering
+    labelDiv.style.display = 'none';
+
     timeScale = 1.0;
     hoverTarget = null;
     labelDiv.innerText = '';
@@ -373,26 +380,31 @@ setTimeout(() => {
   const intro = document.getElementById('introText');
   const logo = document.getElementById('logoFade');
   const prefix = document.getElementById('namePrefix');
+  const name = document.getElementById('nameTitle');
   const children = Array.from(intro.children);
 
-  // Fade out all text elements except the name wrap
+  // Fade out everything but name/logo
   children.forEach(child => {
     if (child.id !== 'introNameWrap') {
       child.style.opacity = 0;
     }
   });
 
-  // Fade out "I am"
+  // Fade out prefix
   prefix.style.opacity = 0;
 
-  // Fade in logo after "I am" fades out
+  // Animate name + reveal logo
   setTimeout(() => {
     logo.style.display = 'block';
     requestAnimationFrame(() => {
       logo.style.opacity = 1;
+      name.classList.add('animate-to-final');
     });
   }, 1500);
 }, 3000);
+
+
+
 
 animate();
 
