@@ -123,10 +123,12 @@ function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
 
 // Load projects
 loadGLTFProject("ARDI", `${api}/3dobjects/iphone_16_pro_max/scene.gltf`, 30, 6, 0.006).then(p => projects.push(p));
-loadGLTFProject("My Films", `${api}/3dobjects/old_vintage_film_camera/scene.gltf`, 60, 0.25, 0.003).then(p => projects.push(p));
-loadGLTFProject("Portal Defender", `${api}/3dobjects/controller/controller.glb`, 80, 8, 0.0015).then(p => projects.push(p));
-loadGLTFProject("Yaoshi", `${api}/3dobjects/controller/controller.glb`, 100, 8, 0.0005).then(p => projects.push(p));
-loadGLTFProject("Erin and the Otherworld", `${api}/3dobjects/controller/controller.glb`, 120, 8, 0.0001).then(p => projects.push(p));
+loadGLTFProject("My Films", `${api}/3dobjects/old_vintage_film_camera/scene.gltf`, 60, 0.25, 0.005).then(p => projects.push(p));
+loadGLTFProject("Portal Defender", `${api}/3dobjects/controller/controller.glb`, 80, 8, 0.004).then(p => projects.push(p));
+loadGLTFProject("Yaoshi", `${api}/3dobjects/controller/controller.glb`, 100, 8, 0.003).then(p => projects.push(p));
+loadGLTFProject("Erin and the Otherworld", `${api}/3dobjects/controller/controller.glb`, 120, 8, 0.002).then(p => projects.push(p));
+loadGLTFProject("Taffy", `${api}/3dobjects/golden_retriever_sitting/scene.gltf`, 140, 8, 0.001).then(p => projects.push(p));
+
 
 // Hover + Click interaction
 const raycaster = new THREE.Raycaster();
@@ -189,7 +191,8 @@ window.addEventListener('click', async (event) => {
   if (match) {
     document.getElementById('panelTitle').textContent = match.title;
     document.getElementById('panelSubtitle').textContent = match.short;
-    document.getElementById('panelImage').src = `${api}/images/${match.images?.[0] || ''}`;
+    document.getElementById('panelImage').src = match.images?.[0] || '';
+
 document.getElementById('panelDescription').textContent = match.long;
     const btn1 = document.getElementById('seeMoreBtn');
 const btn2 = document.getElementById('playGameBtn');
