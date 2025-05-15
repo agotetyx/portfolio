@@ -290,3 +290,16 @@ canvas {
 .resume-link:hover {
   text-decoration: underline;
 }
+/* Global Orbitron targets */
+button,
+.panel-buttons button,
+#infoToggle,
+#closePanelBtn,
+#introText,
+#introText *,
+h1, h2, h3,
+#panelTitle,
+#panelSubtitle,
+.resume-link {
+  font-family: 'Cal Sans', sans-serif;
+}
