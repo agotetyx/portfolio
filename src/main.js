@@ -127,7 +127,7 @@ loadGLTFProject("My Films", `${api}/3dobjects/old_vintage_film_camera/scene.gltf
 loadGLTFProject("Portal Defender", `${api}/3dobjects/controller/controller.glb`, 80, 8, 0.004).then(p => projects.push(p));
 loadGLTFProject("Yaoshi", `${api}/3dobjects/controller/controller.glb`, 100, 8, 0.003).then(p => projects.push(p));
 loadGLTFProject("Erin and the Otherworld", `${api}/3dobjects/controller/controller.glb`, 120, 8, 0.002).then(p => projects.push(p));
-loadGLTFProject("Taffy", `${api}/3dobjects/golden_retriever_sitting/scene.gltf`, 140, 8, 0.001).then(p => projects.push(p));
+loadGLTFProject("Taffy", `${api}/3dobjects/golden_retriever_sitting/scene.gltf`, 140, 80, 0.001).then(p => projects.push(p));
 
 
 // Hover + Click interaction
