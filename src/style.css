@@ -178,23 +178,18 @@ canvas {
 #nameTitle {
   display: inline-block;
   font-size: 6vw;
-  transition: transform 1.5s ease, font-size 1.5s ease;
+  transition: opacity 2s ease;
   padding-left: 0;
 }
 
-/* Animate to smaller size and shifted position */
-#nameTitle.animate-to-final {
-  font-size: 3.8vw; /* ~30% smaller */
-  transform: translateX(-14.5vw); /* shift left */
-}
 #logoFade {
-  width: 120px;
+  width: 300px;
   height: auto;
   opacity: 0;
   display: none;
-  transition: opacity 2s ease;
-  padding-right: 0.2%;
-  margin-left: -2.5%;
+  transition: opacity 5s ease;
+  margin-left: -6.5%;
+  margin-top: -5.5%;
 
 }
 

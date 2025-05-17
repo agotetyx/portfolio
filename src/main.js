@@ -393,13 +393,16 @@ setTimeout(() => {
   setTimeout(() => {
     logo.style.display = 'block';
     requestAnimationFrame(() => {
+
         prefix.style.opacity = 0;
-      logo.style.opacity = 1;
-      name.classList.add('animate-to-final');
+     
+      name.style.opacity = 0;
      pTags.forEach(p => {
   p.style.opacity = 0;
+  
 });
-    });
+     logo.style.opacity = 1;
+});
   }, 1500);
 }, 3000);
 
