@@ -405,7 +405,7 @@ setTimeout(() => {
 
   // Animate name + reveal logo
   setTimeout(() => {
-    logo.style.display = 'block';
+    logo.style.visibility = 'visible';
     requestAnimationFrame(() => {
 
         prefix.style.opacity = 0;
@@ -418,7 +418,7 @@ setTimeout(() => {
      logo.style.opacity = 1;
 });
   }, 1500);
-}, 3000);
+}, 10000);
 
 
 

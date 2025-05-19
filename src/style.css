@@ -183,13 +183,14 @@ canvas {
 }
 
 #logoFade {
+   position: absolute;
   width: 300px;
   height: auto;
   opacity: 0;
-  display: none;
+  visibility: hidden;
   transition: opacity 5s ease;
-  margin-left: -5.5%;
-  margin-top: -4.0%;
+  margin-left: -4.5%;
+  margin-top: -3.0%;
 
 }
 
