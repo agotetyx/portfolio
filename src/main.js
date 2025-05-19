@@ -193,7 +193,21 @@ window.addEventListener('click', async (event) => {
     document.getElementById('panelSubtitle').textContent = match.short;
     document.getElementById('panelImage').src = match.images?.[0] || '';
 
-document.getElementById('panelDescription').textContent = match.long;
+const descElem = document.getElementById('panelDescription');
+descElem.innerHTML = ''; // Clear previous
+
+if (Array.isArray(match.long)) {
+  const ul = document.createElement('ul');
+  match.long.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item;
+    ul.appendChild(li);
+  });
+  descElem.appendChild(ul);
+} else {
+  descElem.textContent = match.long;
+}
+
     const btn1 = document.getElementById('seeMoreBtn');
 const btn2 = document.getElementById('playGameBtn');
 

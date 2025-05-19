@@ -98,10 +98,11 @@ canvas {
 
 #infoPanel img {
   width: 100%;
+  height: fit-content;
   margin: 1rem 0;
   border-radius: 10px;
   object-fit: cover;
-  max-height: 200px;
+  max-height: 50vh;
 }
 
 .panel-buttons {
