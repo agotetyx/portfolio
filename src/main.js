@@ -504,7 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
       chatLog.scrollTop = chatLog.scrollHeight;
     } catch (err) {
       console.error("❌ Chat fetch error:", err);
-      chatLog.innerHTML += `<div><em>⚠️ Error contacting chatbot</em></div>`;
+      chatLog.innerHTML += `<div><em>⚠️ feature still in development</em></div>`;
     }
   });
 });
