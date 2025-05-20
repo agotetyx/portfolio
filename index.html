@@ -47,8 +47,8 @@
         <a href="https://www.youtube.com/@yourchannel" target="_blank"><i class="fab fa-youtube"></i></a>
         <a href="https://instagram.com/yourhandle" target="_blank"><i class="fab fa-instagram"></i></a>
       </div>
-      <a href="Anurag_Gotety_Resume.pdf" download class="resume-link">Download Resume</a>
-    </div>
+    <button id="downloadResumeBtn" class="resume-link">Download Resume</button>
+</div>
 
     <!-- Info Panel for clicked project -->
     <div id="infoPanel">
@@ -64,5 +64,20 @@
     </div>
 
     <script type="module" src="/src/main.js"></script>
+<!-- Chat Toggle Button -->
+<div id="chatToggleBtn">
+  <img src="/aistar.svg" alt="AI Chat Icon" id="chatIcon" />
+</div>
+
+<!-- Chatbot Overlay -->
+<div id="chatOverlay">
+  <div id="chatHeader">
+    Ask Me Anything
+    <span id="chatCloseBtn">×</span>
+  </div>
+  <div id="chatLog"></div>
+  <input type="text" id="chatInput" placeholder="Ask me anything..." />
+</div>
+
   </body>
 </html>

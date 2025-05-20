@@ -9,8 +9,20 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 let hoverLight = null;
 let hoverHelper = null;
 let sunHoverLight = null;
-const api = 'https://portfolio-backend-huz3.onrender.com';
+//const api = 'https://portfolio-backend-huz3.onrender.com';
+const api = 'http://localhost:3001';
 
+let resumeURL = `${api}/resume/resume.pdf`;
+
+fetch(`${api}/api/meta`)
+  .then(res => res.json())
+  .then(data => {
+    if (data.resume) resumeURL = `${api}${data.resume}`;
+  });
+
+document.getElementById('downloadResumeBtn').onclick = () => {
+  window.open(resumeURL, '_blank');
+};
 
 const scene = new THREE.Scene();
 scene.background = new THREE.TextureLoader().load(`${api}/images/spacetexture.jpg`);
@@ -429,6 +441,17 @@ setTimeout(() => {
   }, 1500);
 }, 150000);
 
+const chatToggle = document.getElementById('chatToggleBtn');
+const chatOverlay = document.getElementById('chatOverlay');
+const chatClose = document.getElementById('chatCloseBtn');
+
+chatToggle.addEventListener('click', () => {
+  chatOverlay.style.display = 'flex';
+});
+
+chatClose.addEventListener('click', () => {
+  chatOverlay.style.display = 'none';
+});
 
 
 
