@@ -386,7 +386,10 @@ function animate() {
   time += 0.01 * timeScale;
 
   if (!paused) {
-    sun.rotation.y += 0.004 * timeScale;
+    if (sun) {
+  sun.rotation.y += 0.004 * timeScale;
+}
+
     projects.forEach((p) => {
       p.mesh.rotation.y += 0.003 * timeScale;
       p.obj.rotation.y += (p.obj.userData.speed || 0.005) * timeScale;
@@ -457,4 +460,51 @@ chatClose.addEventListener('click', () => {
 
 animate();
 
+document.addEventListener('DOMContentLoaded', () => {
+  const chatInput = document.getElementById('chatInput');
+  const chatLog = document.getElementById('chatLog');
 
+  if (!chatInput || !chatLog) {
+    console.error("❌ Chat input or log not found in DOM");
+    return;
+  }
+
+  let contextData = '';
+
+  fetch(`${api}/chat/context.json`)
+    .then(res => res.json())
+    .then(json => {
+      contextData = JSON.stringify(json);
+      console.log("✅ Loaded context:", contextData.slice(0, 100) + "...");
+    })
+    .catch(err => {
+      console.error("❌ Failed to load context.json:", err);
+    });
+
+  chatInput.addEventListener('keypress', async (e) => {
+    if (e.key !== 'Enter') return;
+
+    const question = chatInput.value.trim();
+    if (!question) return;
+
+    chatLog.innerHTML += `<div><strong>You:</strong> ${question}</div>`;
+    chatInput.value = '';
+
+    try {
+      const res = await fetch(`${api}/api/chat`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ message: question })
+});
+
+
+      const data = await res.json();
+      const reply = data.choices?.[0]?.message?.content || 'No response.';
+      chatLog.innerHTML += `<div><strong>Bot:</strong> ${reply}</div>`;
+      chatLog.scrollTop = chatLog.scrollHeight;
+    } catch (err) {
+      console.error("❌ Chat fetch error:", err);
+      chatLog.innerHTML += `<div><em>⚠️ Error contacting chatbot</em></div>`;
+    }
+  });
+});

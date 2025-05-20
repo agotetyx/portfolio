@@ -312,14 +312,49 @@ h1, h2, h3,
   position: fixed;
   bottom: 1rem;
   left: 1rem;
-  background: #111;
-  color: white;
-  padding: 0.75rem 1.2rem;
-  border-radius: 10px;
-  font-weight: bold;
+  width: 4rem;
+  height: 4rem;
+  overflow: hidden;         /* keep it from bleeding outside */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   z-index: 999;
+  background: #7f9bc1;
+border-radius: 10%;
 }
+#chatToggleBtn {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  width: 4rem;
+  height: 4rem;
+  overflow: hidden;         /* keep it from bleeding outside */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  background: #a1c8ff74;
+border-radius: 10%;
+}
+#chatToggleBtn:hover img {
+  transform: scale(1.1);   /* scale up the SVG */
+  transition: transform 0.2s ease;
+}
+#chatToggleBtn:hover {
+  background: #01ffa2bc;
+}
+#chatToggleBtn img {
+  width: 100%;
+  height: 100%;
+  transform: scale(1);   /* scale up the SVG itself */
+  transition: transform 0.2s ease;
+  pointer-events: none;
+  color-interpolation-filters: auto;
+
+}
+
 
 #chatOverlay {
   position: fixed;
