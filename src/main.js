@@ -191,7 +191,16 @@ window.addEventListener('click', async (event) => {
   if (match) {
     document.getElementById('panelTitle').textContent = match.title;
     document.getElementById('panelSubtitle').textContent = match.short;
-    document.getElementById('panelImage').src = match.images?.[0] || '';
+    const panelImage = document.getElementById('panelImage');
+
+if (match.images?.[0]) {
+  panelImage.src = `${match.images[0]}`;
+  panelImage.style.display = 'block';
+} else {
+  panelImage.style.display = 'none';
+}
+
+
 
 const descElem = document.getElementById('panelDescription');
 descElem.innerHTML = ''; // Clear previous
@@ -418,7 +427,7 @@ setTimeout(() => {
      logo.style.opacity = 1;
 });
   }, 1500);
-}, 10000);
+}, 150000);
 
 
 

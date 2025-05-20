@@ -108,6 +108,7 @@ canvas {
 .panel-buttons {
   display: flex;
   gap: 1rem;
+  padding-bottom: 5rem;
 }
 
 .panel-buttons button {
