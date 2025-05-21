@@ -134,12 +134,12 @@ function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
 }
 
 // Load projects
-loadGLTFProject("ARDI", `${api}/3dobjects/iphone_16_pro_max/scene.gltf`, 30, 6, 0.006).then(p => projects.push(p));
-loadGLTFProject("My Films", `${api}/3dobjects/old_vintage_film_camera/scene.gltf`, 60, 0.25, 0.005).then(p => projects.push(p));
-loadGLTFProject("Portal Defender", `${api}/3dobjects/controller/controller.glb`, 80, 8, 0.004).then(p => projects.push(p));
-loadGLTFProject("Yaoshi", `${api}/3dobjects/controller/controller.glb`, 100, 8, 0.003).then(p => projects.push(p));
-loadGLTFProject("Erin and the Otherworld", `${api}/3dobjects/controller/controller.glb`, 120, 8, 0.002).then(p => projects.push(p));
-loadGLTFProject("Taffy", `${api}/3dobjects/golden_retriever_sitting/scene.gltf`, 140, 20, 0.001).then(p => projects.push(p));
+loadGLTFProject("ARDI", `${api}/3dobjects/iphone_16_pro_max/scene.gltf`, 30, 6, 0.004).then(p => projects.push(p));
+loadGLTFProject("My Films", `${api}/3dobjects/old_vintage_film_camera/scene.gltf`, 60, 0.25, 0.003).then(p => projects.push(p));
+loadGLTFProject("Portal Defender", `${api}/3dobjects/controller/controller.glb`, 80, 8, 0.002).then(p => projects.push(p));
+loadGLTFProject("Yaoshi", `${api}/3dobjects/controller/controller.glb`, 100, 8, 0.001).then(p => projects.push(p));
+loadGLTFProject("Erin and the Otherworld", `${api}/3dobjects/controller/controller.glb`, 120, 8, 0.0009).then(p => projects.push(p));
+loadGLTFProject("Taffy", `${api}/3dobjects/golden_retriever_sitting/scene.gltf`, 140, 20, 0.0008).then(p => projects.push(p));
 
 
 // Hover + Click interaction
@@ -439,10 +439,10 @@ setTimeout(() => {
   p.style.opacity = 0;
   
 });
-     logo.style.opacity = 1;
+     logo.style.opacity = 0.55;
 });
   }, 1500);
-}, 150000);
+}, 10000);
 
 const chatToggle = document.getElementById('chatToggleBtn');
 const chatOverlay = document.getElementById('chatOverlay');
