@@ -12,7 +12,7 @@ let sunHoverLight = null;
 const api = 'https://portfolio-backend-huz3.onrender.com';
 //const api = 'http://localhost:3001';
 
-let resumeURL = `${api}/resume/resume.pdf`;
+let resumeURL = `${api}/resume/AnuragGotety_resume.pdf`;
 
 fetch(`${api}/api/meta`)
   .then(res => res.json())
