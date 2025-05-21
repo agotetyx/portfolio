@@ -442,7 +442,7 @@ setTimeout(() => {
      logo.style.opacity = 0.55;
 });
   }, 1500);
-}, 10000);
+}, 150000);
 
 const chatToggle = document.getElementById('chatToggleBtn');
 const chatOverlay = document.getElementById('chatOverlay');
