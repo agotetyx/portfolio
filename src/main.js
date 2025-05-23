@@ -381,6 +381,8 @@ window.addEventListener('mousemove', (event) => {
 
 // Animation loop
 function animate() {
+  
+
   requestAnimationFrame(animate);
 
   time += 0.01 * timeScale;
@@ -412,6 +414,13 @@ function animate() {
 }
 const infoToggle = document.getElementById('infoToggle');
 const infoPanelMini = document.getElementById('infoPanelMini');
+const resetCameraBtn = document.getElementById('resetCameraBtn');
+
+const infoVisible = infoToggle.style.right === '0px';
+resetCameraBtn.style.display = infoVisible ? 'none' : 'block';
+infoPanelMini.style.display = infoVisible ? 'none' : 'block';
+
+
 
 infoToggle.addEventListener('click', () => {
   infoPanelMini.classList.toggle('show');
@@ -459,6 +468,11 @@ chatClose.addEventListener('click', () => {
 
 
 animate();
+
+document.getElementById('resetCameraBtn').addEventListener('click', () => {
+  cameraTargetPosition = new THREE.Vector3(120, 10, 0);
+  orbitTargetPosition = new THREE.Vector3(0, 0, 0);
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   const chatInput = document.getElementById('chatInput');

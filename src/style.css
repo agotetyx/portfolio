@@ -93,7 +93,9 @@ canvas {
   transition: right 0.4s ease;
   z-index: 100;
   overflow-y: auto;
-  
+}
+#panelDescription {
+  padding-bottom: 2rem; /* or however much space you want */
 }
 
 #infoPanel img {
@@ -105,13 +107,19 @@ canvas {
   max-height: 50vh;
 }
 
+#infopanel p {
+  padding-bottom: 50rem;
+}
+
 .panel-buttons {
+  position: sticky;
   display: flex;
   gap: 1rem;
-  padding-bottom: 5rem;
+  padding-bottom: 0.1rem;
 }
 
 .panel-buttons button {
+  
   flex: 1;
   padding: 0.75rem;
   font-size: 1rem;
@@ -295,6 +303,25 @@ canvas {
   text-align: center;
 }
 .resume-link:hover {
+  background: #444;
+}
+
+.reset-camera {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0.75rem 1.2rem;
+  background: #222;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  transition: background 0.3s ease;
+}
+.reset-camera:hover {
   background: #444;
 }
 
