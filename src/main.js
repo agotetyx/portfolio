@@ -9,8 +9,8 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 let hoverLight = null;
 let hoverHelper = null;
 let sunHoverLight = null;
-const api = 'https://portfolio-backend-huz3.onrender.com';
-//const api = 'http://localhost:3001';
+//const api = 'https://portfolio-backend-huz3.onrender.com';
+const api = 'http://localhost:3001';
 
 let resumeURL = `${api}/resume/AnuragGotety_resume.pdf`;
 
@@ -96,6 +96,7 @@ gltfLoader.load(`${api}/3dobjects/blackhole/scene.gltf`, (gltf) => {
 
   // ✅ Store reference to wrapper for click logic
   window.sunWrapper = sunWrapper;
+   document.getElementById('loadingSpinner').style.display = 'none';
 });
 
 
@@ -134,13 +135,25 @@ function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
 }
 
 // Load projects
-loadGLTFProject("ARDI", `${api}/3dobjects/iphone_16_pro_max/scene.gltf`, 30, 6, 0.004).then(p => projects.push(p));
-loadGLTFProject("My Films", `${api}/3dobjects/old_vintage_film_camera/scene.gltf`, 60, 0.25, 0.003).then(p => projects.push(p));
-loadGLTFProject("Portal Defender", `${api}/3dobjects/controller/controller.glb`, 80, 8, 0.002).then(p => projects.push(p));
-loadGLTFProject("Yaoshi", `${api}/3dobjects/controller/controller.glb`, 100, 8, 0.001).then(p => projects.push(p));
-loadGLTFProject("Erin and the Otherworld", `${api}/3dobjects/controller/controller.glb`, 120, 8, 0.0009).then(p => projects.push(p));
-loadGLTFProject("Taffy", `${api}/3dobjects/golden_retriever_sitting/scene.gltf`, 140, 20, 0.0008).then(p => projects.push(p));
+const assetPromises = [
+  loadGLTFProject("ARDI", `${api}/3dobjects/iphone_16_pro_max/scene.gltf`, 30, 6, 0.004),
+  loadGLTFProject("My Films", `${api}/3dobjects/old_vintage_film_camera/scene.gltf`, 60, 0.25, 0.003),
+  loadGLTFProject("Portal Defender", `${api}/3dobjects/controller/controller.glb`, 80, 8, 0.002),
+  loadGLTFProject("Yaoshi", `${api}/3dobjects/controller/controller.glb`, 100, 8, 0.001),
+  loadGLTFProject("Erin and the Otherworld", `${api}/3dobjects/controller/controller.glb`, 120, 8, 0.0009),
+  loadGLTFProject("Taffy", `${api}/3dobjects/golden_retriever_sitting/scene.gltf`, 140, 20, 0.0008)
+];
 
+Promise.all(assetPromises).then(loadedProjects => {
+  projects.push(...loadedProjects);
+  document.getElementById('loadingSpinner').style.display = 'none';
+});
+
+
+Promise.all(assetPromises).then(loadedProjects => {
+  projects.push(...loadedProjects);
+  document.getElementById('loadingSpinner').style.display = 'none';
+});
 
 // Hover + Click interaction
 const raycaster = new THREE.Raycaster();
