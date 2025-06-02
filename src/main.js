@@ -498,18 +498,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let contextData = '';
 
-  fetch(`${api}/chat/context.json`)
-    .then(res => res.json())
-    .then(json => {
-      contextData = JSON.stringify(json);
-      console.log("✅ Loaded context:", contextData.slice(0, 100) + "...");
-    })
-    .catch(err => {
-      console.error("❌ Failed to load context.json:", err);
-    });
+fetch(`${api}/api/context`)
+  .then(res => res.json())
+  .then(json => {
+    contextData = JSON.stringify(json);
+    console.log("✅ MCP context loaded:", contextData.slice(0, 100) + "...");
+  })
+  .catch(err => {
+    console.error("❌ Failed to load MCP context:", err);
+  });
 
   chatInput.addEventListener('keypress', async (e) => {
     if (e.key !== 'Enter') return;
+    document.getElementById('chatSendBtn').addEventListener('click', async () => {
+  const question = chatInput.value.trim();
+  if (!question) return;
+
+  chatLog.innerHTML += `<div><strong>You:</strong> ${question}</div>`;
+  chatInput.value = '';
+
+  try {
+    const res = await fetch(`${api}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `Context:\n${contextData}\n\nUser Question:\n${question}`
+      })
+    });
+
+    const data = await res.json();
+    const reply = data.reply || 'No response.';
+    chatLog.innerHTML += `<div><strong>Bot:</strong> ${reply}</div>`;
+    chatLog.scrollTop = chatLog.scrollHeight;
+  } catch (err) {
+    console.error("❌ Chat fetch error:", err);
+    chatLog.innerHTML += `<div><em>⚠️ feature still in development</em></div>`;
+  }
+});
+
 
     const question = chatInput.value.trim();
     if (!question) return;
@@ -521,12 +547,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(`${api}/api/chat`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ message: question })
+  body: JSON.stringify({
+    message: `Context:\n${contextData}\n\nUser Question:\n${question}`
+  })
 });
 
 
+
       const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content || 'No response.';
+      console.log("🧠 Full chat response:", data);
+      const reply = data.reply || 'No response.';
       chatLog.innerHTML += `<div><strong>Bot:</strong> ${reply}</div>`;
       chatLog.scrollTop = chatLog.scrollHeight;
     } catch (err) {
