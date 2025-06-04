@@ -508,23 +508,19 @@ fetch(`${api}/api/context`)
     console.error("❌ Failed to load MCP context:", err);
   });
 
-  chatInput.addEventListener('keypress', async (e) => {
-    if (e.key !== 'Enter') return;
-    document.getElementById('chatSendBtn').addEventListener('click', async () => {
+  document.getElementById('chatSendBtn').addEventListener('click', sendChat);
+chatInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') sendChat();
+});
+
+async function sendChat() {
   const question = chatInput.value.trim();
   if (!question) return;
 
   const userMsg = document.createElement('div');
-userMsg.className = 'chat-message user';
-userMsg.textContent = question;
-chatLog.appendChild(userMsg);
-chatLog.scrollTop = chatLog.scrollHeight;
-const botMsg = document.createElement('div');
-botMsg.className = 'chat-message bot';
-botMsg.textContent = reply;
-chatLog.appendChild(botMsg);
-
-
+  userMsg.className = 'chat-message user';
+  userMsg.textContent = question;
+  chatLog.appendChild(userMsg);
   chatInput.value = '';
 
   try {
@@ -538,40 +534,18 @@ chatLog.appendChild(botMsg);
 
     const data = await res.json();
     const reply = data.reply || 'No response.';
-    chatLog.innerHTML += `<div><strong>Bot:</strong> ${reply}</div>`;
-    chatLog.scrollTop = chatLog.scrollHeight;
+    const botMsg = document.createElement('div');
+    botMsg.className = 'chat-message bot';
+    botMsg.innerHTML = reply;
+    chatLog.appendChild(botMsg);
   } catch (err) {
-    console.error("❌ Chat fetch error:", err);
-    chatLog.innerHTML += `<div><em>⚠️ feature still in development</em></div>`;
+    const errMsg = document.createElement('div');
+    errMsg.className = 'chat-message bot';
+    errMsg.textContent = "⚠️ Error connecting to AI.";
+    chatLog.appendChild(errMsg);
   }
-});
 
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
 
-    const question = chatInput.value.trim();
-    if (!question) return;
-
-    chatLog.innerHTML += `<div><strong>You:</strong> ${question}</div>`;
-    chatInput.value = '';
-
-    try {
-      const res = await fetch(`${api}/api/chat`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    message: `Context:\n${contextData}\n\nUser Question:\n${question}`
-  })
-});
-
-
-
-      const data = await res.json();
-      console.log("🧠 Full chat response:", data);
-      const reply = data.reply || 'No response.';
-      chatLog.innerHTML += `<div><strong>Bot:</strong> ${reply}</div>`;
-      chatLog.scrollTop = chatLog.scrollHeight;
-    } catch (err) {
-      console.error("❌ Chat fetch error:", err);
-      chatLog.innerHTML += `<div><em>⚠️ feature still in development</em></div>`;
-    }
-  });
 });
