@@ -514,7 +514,17 @@ fetch(`${api}/api/context`)
   const question = chatInput.value.trim();
   if (!question) return;
 
-  chatLog.innerHTML += `<div><strong>You:</strong> ${question}</div>`;
+  const userMsg = document.createElement('div');
+userMsg.className = 'chat-message user';
+userMsg.textContent = question;
+chatLog.appendChild(userMsg);
+chatLog.scrollTop = chatLog.scrollHeight;
+const botMsg = document.createElement('div');
+botMsg.className = 'chat-message bot';
+botMsg.textContent = reply;
+chatLog.appendChild(botMsg);
+
+
   chatInput.value = '';
 
   try {
