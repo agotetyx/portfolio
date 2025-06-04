@@ -9,8 +9,8 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 let hoverLight = null;
 let hoverHelper = null;
 let sunHoverLight = null;
-const api = 'https://portfolio-backend-huz3.onrender.com';
-//const api = 'http://localhost:3001';
+//const api = 'https://portfolio-backend-huz3.onrender.com';
+const api = 'http://localhost:3001';
 
 let resumeURL = `${api}/resume/AnuragGotety_resume.pdf`;
 
