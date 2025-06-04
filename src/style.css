@@ -502,7 +502,6 @@ border-radius: 10%;
   opacity: 1;
   transform: translateY(0);
 }
-
 .chat-message {
   max-width: 75%;
   padding: 0.6rem 1rem;
@@ -529,4 +528,11 @@ border-radius: 10%;
   color: white;
   border-bottom-left-radius: 0;
   margin-right: auto;
+}
+
+#chatLog {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
