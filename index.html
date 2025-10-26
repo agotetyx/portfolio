@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/AGLogo.png" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Anurag Gotety Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
 
@@ -20,23 +20,25 @@
   </head>
 
   <body>
+
     <canvas id="bg"></canvas>
 
-    <!-- Intro Text -->
-    <div id="introText">
-      <div id="introNameWrap">
-        <img id="logoFade" src="/AGLogo.png" alt="AG Logo" />
-        <span id="namePrefix">I am</span>
-        <span id="nameTitle">Anurag Gotety</span>
-      </div>
-      <p>Welcome to my universe</p>
-      <p2 style="font-style: italic; opacity: 0.8;">Click any object to begin.</p2>
-    </div>
+    <!-- Intro Text (top-left corner) -->
+<div id="introText">
+  <div id="introNameWrap">
+    <img id="logoFade" src="/AGLogo.png" alt="AG Logo" />
+    <span id="namePrefix">I am</span>
+    <span id="nameTitle">Anurag Gotety</span>
+  </div>
+  <p>Welcome to my universe</p>
+  <p2 style="font-style: italic; opacity: 0.8;">Click any object to begin.</p2>
+</div>
+
 
     <!-- Hamburger toggle -->
     <div id="infoToggle">&#9776;</div>
 
-    <!-- Social Panel -->
+    <!-- Social Panel (hamburger menu) -->
     <div id="infoPanelMini">
       <p><strong>Connect with me</strong></p>
       <div class="social-links">
@@ -45,13 +47,12 @@
         <a href="https://www.youtube.com/@anuraggotety7680/videos" target="_blank"><i class="fab fa-youtube"></i></a>
         <a href="https://www.instagram.com/goat80_productions/" target="_blank"><i class="fab fa-instagram"></i></a>
       </div>
-      <button id="downloadResumeBtn" class="resume-link">Download Resume</button>
-    </div>
-
-    <div id="loadingSpinner">
-      <div class="spinner"></div>
-      <p>Loading 3D assets...</p>
-    </div>
+    <button id="downloadResumeBtn" class="resume-link">Download Resume</button>
+</div>
+<div id="loadingSpinner">
+  <div class="spinner"></div>
+  <p>Loading 3D assets...</p>
+</div>
 
     <!-- Info Panel for clicked project -->
     <div id="infoPanel">
@@ -64,50 +65,30 @@
       <p id="panelSubtitle">Short description line.</p>
       <img id="panelImage" src="" alt="Project image" />
       <p id="panelDescription">Longer paragraph about the project...</p>
+      
     </div>
 
     <script type="module" src="/src/main.js"></script>
-    <button id="resetCameraBtn" class="reset-camera">Reset Camera</button>
+<!-- Chat Toggle Button -->
+<div id="chatToggleBtn">
+<img src="/aistar.svg" alt="AI Chat" id="chatIcon" />
+</div>
+<div id="chatTooltip">Anurag's personalized AI Agent</div>
 
-    <!-- Dify Chatbot Embed -->
-    <script>
-      window.difyChatbotConfig = {
-        token: 'fZ7DN52AQR0M0VuM',
-        inputs: {},
-        systemVariables: {},
-        userVariables: {},
-      }
-    </script>
+<!-- Chatbot Overlay -->
+<div id="chatOverlay">
+  <div id="chatHeader">
+    Ask Me Anything about Anurag
+    <span id="chatCloseBtn">×</span>
+  </div>
+  <div id="chatLog"></div>
+  <div id="chatInputWrap">
+  <input type="text" id="chatInput" placeholder="Ask me anything..." />
+  <button id="chatSendBtn">➤</button>
+</div>
 
-    <script
-      src="https://udify.app/embed.min.js"
-      id="fZ7DN52AQR0M0VuM"
-      defer>
-    </script>
-
-    <style>
-      /* Dify Chatbot Styling */
-      #dify-chatbot-bubble-button {
-        background-color: #1C64F2 !important;
-        bottom: 1rem !important;
-        left: 1rem !important;
-        right: auto !important;
-      }
-      #dify-chatbot-bubble-window {
-        width: 24rem !important;
-        height: 40rem !important;
-        bottom: 5rem !important;
-        left: 1rem !important;
-        right: auto !important;
-      }
-
-      /* Hide old chat elements if any script still tries to render them */
-      #chatToggleBtn,
-      #chatOverlay,
-      #chatTooltip {
-        display: none !important;
-      }
-    </style>
+</div>
+<button id="resetCameraBtn" class="reset-camera">Reset Camera</button>
 
   </body>
 </html>
