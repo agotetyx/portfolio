@@ -124,7 +124,8 @@ canvas {
   padding-bottom: 2rem; /* or however much space you want */
 }
 
-#infoPanel img {
+#infoPanel img,
+#infoPanel video {
   width: 100%;
   height: fit-content;
   margin: 1rem 0;

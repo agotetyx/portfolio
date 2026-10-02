@@ -1,0 +1,22 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Large static assets: filenames aren't content-hashed, so cache for a week rather than forever.
+[[headers]]
+  for = "/3dobjects/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*-build/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

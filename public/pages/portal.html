@@ -1,0 +1,71 @@
+<!-- Portal Defender -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Defender</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; background-color: #0d0d0d; color: #f2f2f2; padding: 2rem; line-height: 1.6; }
+    header { font-size: 2.5rem; font-weight: bold; margin-bottom: 1rem; }
+    .subtitle { font-size: 1.25rem; opacity: 0.8; margin-bottom: 2rem; }
+    .content { max-width: 800px; }
+    a { color: #88ccff; }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <header>Portal Defender</header>
+    <a href="/portal-build/index.html" target="_blank">Play Game</a>
+    <div class="subtitle">Physics-based space shooter with gravity mechanics</div>
+
+    <p>This was a solo project built from scratch using Unity and online assets. Core mechanics were created using Euler calculations, with animations triggered by collision events. Enemies and powerups spawn randomly throughout the map. I also built the UI system displaying player information.</p>
+
+    <h2>Rotational Mechanics & Player Controller</h2>
+    <ul>
+      <li>
+        <strong>Designed and implemented the core gameplay loop</strong> using Euler-based rotational and gravity calculations.
+        <ul>
+          <li>Created a gravity-based navigation system that simulates orbital pull toward a central black hole.</li>
+          <li>Mapped vertical input to radius control and horizontal input to angle rotation using polar coordinates.</li>
+          <li>Added inverse-square gravity scaling for realistic orbital decay.</li>
+          <li>Used position clamping and angle normalization for smooth, controlled gameplay.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>Enemy AI Programming</h2>
+    <ul>
+      <li>
+        <strong>Built a procedural enemy spawning system</strong> with dynamic difficulty and three enemy archetypes:
+        <ul>
+          <li><strong>Asteroid</strong>: Passive obstacle with randomized spawn behavior.</li>
+          <li><strong>Shooter</strong>: Stationary enemy forming a defensive ring and firing projectiles.</li>
+          <li><strong>Follower</strong>: Homing enemy using vector math and rotation tracking to pursue player.</li>
+        </ul>
+        <li>Used random spawn coordinates and timers to ensure varied, unpredictable encounters.</li>
+        <li>Implemented shooter AI that halts within radius and reverses bullet direction.</li>
+      </li>
+    </ul>
+
+    <h2>Camera Programming</h2>
+    <ul>
+      <li>Implemented a dynamic screen shake effect using the Observer pattern.</li>
+      <li>Triggered shake on player damage through a static event channel.</li>
+      <li>Used tweening on camera position and rotation to achieve responsive shake feedback.</li>
+    </ul>
+
+    <h2>Particle Animation & UI/UX Programming</h2>
+    <ul>
+      <li>Added particle effects for key interactions like player collisions.</li>
+      <li>Created a modular UI system with player stats and an options menu.</li>
+      <li>Included settings for audio/SFX volume and resolution scaling.</li>
+    </ul>
+
+    <h3>Contact</h3>
+    <p><strong>Email:</strong> <a href="mailto:anurag10gotety@gmail.com">anurag10gotety@gmail.com</a></p>
+    <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/anurag-gotety-486157259/" target="_blank">linkedin.com/in/anurag-gotety</a></p>
+    <p><strong>GitHub:</strong> <a href="https://github.com/agotety" target="_blank">github.com/agotety</a></p>
+  </div>
+</body>
+</html>

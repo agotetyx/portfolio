@@ -1,0 +1,15 @@
+{
+  "title": "Portal Defender",
+  "short": "2D space shooter with orbital movement mechanics",
+  "images": ["/images/portal.mp4"],
+  "long": [
+  "Designed and developed a 2D space action game in Unity, featuring gravity-based navigation and rotational movement around a central black hole",
+  "Implemented a custom physics system using Euler calculations and polar coordinates to create smooth orbital mechanics and dynamic player control",
+  "Built adaptive enemy AI and procedural spawning for multiple enemy types, supporting scalable difficulty and engaging encounters",
+  "Created a modular UI/UX system with player stats, audio/resolution settings, and visual feedback enhancements like screen shake and particle effects"
+],
+  "button1": "Play Game",
+  "button1Link": "/portal-build/index.html",
+  "button2Link": "/pages/portal.html",
+  "button2": "Learn More"
+}

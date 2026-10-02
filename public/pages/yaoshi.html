@@ -1,0 +1,62 @@
+<!-- Yaoshi -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yaoshi</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; background-color: #0d0d0d; color: #f2f2f2; padding: 2rem; line-height: 1.6; }
+    header { font-size: 2.5rem; font-weight: bold; margin-bottom: 1rem; }
+    .subtitle { font-size: 1.25rem; opacity: 0.8; margin-bottom: 2rem; }
+    .content { max-width: 800px; }
+    a { color: #88ccff; }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <header>Yaoshi</header>
+    <a href="/yaoshi-build/index.html" target="_blank">Play Game</a>
+    <div class="subtitle">Atmospheric puzzle-platformer built during Game Jam 2023</div>
+
+    <p>Sole Programmer in a 4-person team (Designer, Producer, Artist, Programmer). Focused on player movement, UI systems, and the game's cinematic look.</p>
+
+    <h2>Player Controller</h2>
+    <ul>
+      <li><strong>Implemented double jump functionality</strong> using the State Design Pattern.
+        <ul>
+          <li>Refactored jump logic to support multi-phase jumps via <code>JumpState</code> class.</li>
+          <li>Handled state transitions for smooth input responsiveness and modularity.</li>
+          <li>Reinforced concepts in gameplay programming and scalable mechanic design.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>Parallax-Cinematic System</h2>
+    <ul>
+      <li><strong>Created a dynamic parallax illusion</strong> using Quaternion-based rotations and vertex transformations.
+        <ul>
+          <li>Developed a layered scene design simulating 3D spiraling around a tree trunk.</li>
+          <li>Implemented background and foreground layers reacting to player movement.</li>
+          <li>Maintained performance with optimized vertex math.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>UI/UX Programming</h2>
+    <ul>
+      <li><strong>Built modular UI systems</strong> including win/lose states and a dynamic in-game store.
+        <ul>
+          <li>Store was functional but cut late due to game jam constraints.</li>
+          <li>UI prioritized accessibility and responsiveness using event-driven architecture.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>Contact</h3>
+    <p><strong>Email:</strong> <a href="mailto:anurag10gotety@gmail.com">anurag10gotety@gmail.com</a></p>
+    <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/anurag-gotety-486157259/" target="_blank">linkedin.com/in/anurag-gotety</a></p>
+    <p><strong>GitHub:</strong> <a href="https://github.com/agotety" target="_blank">github.com/agotety</a></p>
+  </div>
+</body>
+</html>

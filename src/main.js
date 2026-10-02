@@ -1,7 +1,9 @@
 import './style.css';
+import projectData from './data/projects/index.js';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -9,23 +11,12 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 let hoverLight = null;
 let hoverHelper = null;
 let sunHoverLight = null;
-const api = 'https://portfolio-backend-huz3.onrender.com';
-//const api = 'http://localhost:3001';
-
-let resumeURL = `${api}/resume/AnuragGotety_resume.pdf`;
-
-fetch(`${api}/api/meta`)
-  .then(res => res.json())
-  .then(data => {
-    if (data.resume) resumeURL = `${api}${data.resume}`;
-  });
-
 document.getElementById('downloadResumeBtn').onclick = () => {
-  window.open(resumeURL, '_blank');
+  window.open('/resume/AnuragGotety_resume.pdf', '_blank');
 };
 
 const scene = new THREE.Scene();
-scene.background = new THREE.TextureLoader().load(`${api}/images/spacetexture.jpg`);
+scene.background = new THREE.TextureLoader().load(`/images/spacetexture.jpg`);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.setZ(30);
@@ -68,10 +59,10 @@ function addStar() {
 Array(400).fill().forEach(addStar);
 
 // SUN
-const gltfLoader = new GLTFLoader();
+const gltfLoader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 let sun; // Replace global `sun` reference
 
-gltfLoader.load(`${api}/3dobjects/blackhole/scene.gltf`, (gltf) => {
+gltfLoader.load(`/3dobjects/blackhole/blackhole.opt.glb`, (gltf) => {
   sun = gltf.scene;
   sun.name = "Anurag Gotety"; // Set name to match JSON title
   sun.scale.set(7, 7, 7);
@@ -104,8 +95,7 @@ gltfLoader.load(`${api}/3dobjects/blackhole/scene.gltf`, (gltf) => {
 // Load and wrap a GLTF model with orbital logic
 function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
   return new Promise((resolve, reject) => {
-    const loader = new GLTFLoader();
-    loader.load(path, (gltf) => {
+    gltfLoader.load(path, (gltf) => {
       const model = gltf.scene;
       model.name = name;
       model.scale.set(scale, scale, scale);
@@ -136,12 +126,12 @@ function loadGLTFProject(name, path, orbitRadius, scale = 1, speed = 0.005) {
 
 // Load projects
 const assetPromises = [
-  loadGLTFProject("ARDI", `${api}/3dobjects/iphone_16_pro_max/scene.gltf`, 30, 6, 0.004),
-  loadGLTFProject("My Films", `${api}/3dobjects/old_vintage_film_camera/scene.gltf`, 60, 0.25, 0.003),
-  loadGLTFProject("Portal Defender", `${api}/3dobjects/controller/controller.glb`, 80, 8, 0.002),
-  loadGLTFProject("Yaoshi", `${api}/3dobjects/controller/controller.glb`, 100, 8, 0.001),
-  loadGLTFProject("Erin and the Otherworld", `${api}/3dobjects/controller/controller.glb`, 120, 8, 0.0009),
-  loadGLTFProject("Taffy", `${api}/3dobjects/golden_retriever_sitting/scene.gltf`, 140, 20, 0.0008)
+  loadGLTFProject("ARDI", `/3dobjects/iphone_16_pro_max/iphone_16_pro_max.opt.glb`, 30, 6, 0.004),
+  loadGLTFProject("My Films", `/3dobjects/old_vintage_film_camera/old_vintage_film_camera.opt.glb`, 60, 0.25, 0.003),
+  loadGLTFProject("Portal Defender", `/3dobjects/controller/controller.opt.glb`, 80, 8, 0.002),
+  loadGLTFProject("Yaoshi", `/3dobjects/controller/controller.opt.glb`, 100, 8, 0.001),
+  loadGLTFProject("Erin and the Otherworld", `/3dobjects/controller/controller.opt.glb`, 120, 8, 0.0009),
+  loadGLTFProject("Taffy", `/3dobjects/golden_retriever_sitting/golden_retriever_sitting.opt.glb`, 140, 20, 0.0008)
 ];
 
 Promise.all(assetPromises).then(loadedProjects => {
@@ -205,8 +195,6 @@ window.addEventListener('click', async (event) => {
   focusedProject = obj;
   paused = true;
 
-  const res = await fetch(`${api}/api/projects`);
-  const projectData = await res.json();
 
   // Handle blackhole (Anurag card)
   const match = (obj === window.sunWrapper)
@@ -218,11 +206,18 @@ window.addEventListener('click', async (event) => {
     document.getElementById('panelSubtitle').textContent = match.short;
     const panelImage = document.getElementById('panelImage');
 
-if (match.images?.[0]) {
-  panelImage.src = `${match.images[0]}`;
-  panelImage.style.display = 'block';
+const panelVideo = document.getElementById('panelVideo');
+const media = match.images?.[0];
+const isVideo = /\.(mp4|webm)$/i.test(media || '');
+
+panelImage.style.display = media && !isVideo ? 'block' : 'none';
+panelVideo.style.display = isVideo ? 'block' : 'none';
+if (isVideo) {
+  panelVideo.src = media;
+  panelVideo.play().catch(() => {});
 } else {
-  panelImage.style.display = 'none';
+  panelVideo.removeAttribute('src');
+  if (media) panelImage.src = media;
 }
 
 
@@ -496,18 +491,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  let contextData = '';
-
-fetch(`${api}/api/context`)
-  .then(res => res.json())
-  .then(json => {
-    contextData = JSON.stringify(json);
-    console.log("✅ MCP context loaded:", contextData.slice(0, 100) + "...");
-  })
-  .catch(err => {
-    console.error("❌ Failed to load MCP context:", err);
-  });
-
   document.getElementById('chatSendBtn').addEventListener('click', sendChat);
 chatInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') sendChat();
@@ -524,11 +507,11 @@ async function sendChat() {
   chatInput.value = '';
 
   try {
-    const res = await fetch(`${api}/api/chat`, {
+    const res = await fetch(`/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        message: `Context:\n${contextData}\n\nUser Question:\n${question}`
+        message: question
       })
     });
 

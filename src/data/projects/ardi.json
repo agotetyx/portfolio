@@ -1,0 +1,13 @@
+{
+  "title": "ARDI",
+  "short": "React Native location-based investigation game blending escape rooms, treasure hunts, and geocaching, where players uncover clues, solve riddles, and unravel mysteries in cities worldwide",
+  "long": [
+  "Developed a production-ready React Native mobile platform for AR-based adventure games and location-aware experiences",
+  "Implemented Stripe payment integration, Google Sign-In, and a secure, multi-step booking flow using Context API",
+  "Architected a modular, scalable UI system with dynamic server-driven rendering and performance optimizations",
+  "Designed and delivered immersive AR features using ViroReact, enabling real-time object tracking and interactive 3D challenges"
+],
+  "button1": "Visit Website",
+  "button1Link": "https://ardi.one/",
+  "button2": "View Project"
+}

@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local secrets (set OPENAI_API_KEY in Netlify site settings for production)
+.env
+.netlify
+deno.lock

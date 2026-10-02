@@ -1,0 +1,17 @@
+{
+  "title": "Anurag Gotety",
+  "short": "I am a Full-stack engineer with a passion for UI/UX, AR gaming, and creative tech. I build immersive, performant apps blending design, systems thinking, and real-world interactivity.",
+  "images": ["/images/anurag.jpg"],
+  "long": [
+  "Full-stack software engineer with a strong focus on performance, UI architecture, and system design",
+  "Experienced in building modular, scalable frontends using React, React Native, and modern web frameworks",
+  "Skilled in integrating real-time features, AR/3D visuals, and dynamic rendering to create immersive experiences",
+  "Proficient in JavaScript, Python, C#, TypeScript, SQL, and GLSL across web, mobile, and game development platforms",
+  "Strong background in data structures, game programming, and computer vision",
+  "Comfortable across the stack—from designing user-centric interfaces to deploying backend APIs",
+  "Driven by curiosity and a passion for building elegant, user-focused software with creative and technical depth"
+],
+  "button1": "Contact Me",
+  "button2": "Download Resume",
+  "button2Link": "/resume/AnuragGotety_resume.pdf"
+}

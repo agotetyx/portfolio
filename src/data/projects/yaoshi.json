@@ -1,0 +1,15 @@
+{
+  "title": "Yaoshi",
+  "short": "In this 2D platformer, a plague ravages a small town in china, a family of herbalists must acquire a medicinal root from the mountains before it's too late.",
+  "images": ["/images/yaoshi.mp4"],
+  "long": [
+  "Developed gameplay systems for a 2D cinematic platformer built for Game Jam 2023, including movement, UI, and camera effects",
+  "Implemented a double jump mechanic using the State Design Pattern, enabling clean transitions and modular control logic",
+  "Engineered a dynamic parallax illusion system using Quaternion rotations and vertex transformations to simulate 3D depth in a 2D scene",
+  "Built a modular UI framework with responsive menu navigation and a shop interface, leveraging event-driven state management for maintainable UX flows"
+],
+  "button1": "Play Game",
+  "button1Link": "/yaoshi-build/index.html",
+  "button2Link": "/pages/yaoshi.html",
+  "button2": "Learn More"
+}
