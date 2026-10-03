@@ -378,23 +378,12 @@ h1, h2, h3,
   justify-content: center;
   cursor: pointer;
   z-index: 999;
-  background: #7f9bc1;
-border-radius: 10%;
-}
-#chatToggleBtn {
-  position: fixed;
-  bottom: 1rem;
-  left: 1rem;
-  width: 4rem;
-  height: 4rem;
-  overflow: hidden;         /* keep it from bleeding outside */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 999;
-  background: #a1c8ff74;
-border-radius: 10%;
+  background: rgba(28, 29, 34, 0.55);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  border-radius: 10%;
 }
 #chatToggleBtn:hover img {
   transform: scale(1.1);   /* scale up the SVG */
