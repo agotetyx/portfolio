@@ -7,6 +7,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { initNavTutorial } from './navTutorial.js';
 
 let hoverLight = null;
 let hoverHelper = null;
@@ -61,6 +62,8 @@ Array(400).fill().forEach(addStar);
 // SUN
 const gltfLoader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 let sun; // Replace global `sun` reference
+let sunLoaded;
+const sunPromise = new Promise((resolve) => { sunLoaded = resolve; });
 
 gltfLoader.load(`/3dobjects/blackhole/blackhole.opt.glb`, (gltf) => {
   sun = gltf.scene;
@@ -88,6 +91,7 @@ gltfLoader.load(`/3dobjects/blackhole/blackhole.opt.glb`, (gltf) => {
   // ✅ Store reference to wrapper for click logic
   window.sunWrapper = sunWrapper;
    document.getElementById('loadingSpinner').style.display = 'none';
+  sunLoaded();
 });
 
 
@@ -138,6 +142,8 @@ Promise.all(assetPromises).then(loadedProjects => {
   projects.push(...loadedProjects);
   document.getElementById('loadingSpinner').style.display = 'none';
 });
+
+Promise.all([sunPromise, ...assetPromises]).then(() => initNavTutorial(renderer.domElement));
 
 
 Promise.all(assetPromises).then(loadedProjects => {

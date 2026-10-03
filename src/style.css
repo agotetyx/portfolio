@@ -541,3 +541,159 @@ border-radius: 10%;
   display: flex;
   flex-direction: column;
 }
+
+/* ---------- Navigation tutorial ---------- */
+#navTutorial {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 12px);
+  width: 50vw;
+  min-width: 560px;
+  max-width: calc(100% - 48px);
+  padding: 14px;
+  box-sizing: border-box;
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  background: rgba(28, 29, 34, 0.55);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: #f5f5f7;
+  user-select: none;
+  z-index: 90; /* below #infoPanel so it slides over */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 250ms ease, transform 250ms ease, visibility 250ms;
+}
+#navTutorial.nt-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+#navTutorial .nt-stage {
+  position: relative;
+  flex: none;
+  width: 200px;
+  height: 150px;
+  border-radius: 13px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+#navTutorial .nt-stage svg { display: block; }
+#navTutorial .nt-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 4px 2px 0;
+}
+#navTutorial .nt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+#navTutorial .nt-eyebrow,
+#navTutorial .nt-status {
+  font: 500 11px 'IBM Plex Mono', monospace;
+}
+#navTutorial .nt-eyebrow { letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.6); }
+#navTutorial .nt-status { letter-spacing: 0.06em; }
+#navTutorial .nt-title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+#navTutorial .nt-sub {
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.72);
+  text-wrap: pretty;
+}
+#navTutorial .nt-controls {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+#navTutorial .nt-nav { display: flex; align-items: center; gap: 12px; }
+#navTutorial .nt-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 17px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+#navTutorial .nt-arrow:hover:not(:disabled) { background: rgba(255, 255, 255, 0.16); }
+#navTutorial .nt-arrow:disabled { cursor: default; }
+#navTutorial .nt-dots { display: flex; gap: 6px; align-items: center; }
+#navTutorial .nt-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: all 250ms;
+}
+#navTutorial .nt-close {
+  border: 0;
+  background: transparent;
+  padding: 6px 2px;
+  font: 500 13px 'IBM Plex Sans', sans-serif;
+  color: rgba(255, 255, 255, 0.62);
+  cursor: pointer;
+}
+#navTutorial .nt-close:hover { color: #fff; }
+
+/* Help "?" button — stacked above Reset Camera */
+#navTutorialHelp {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + 58px);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  z-index: 999;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+#navTutorialHelp.nt-open { display: flex; }
+#navTutorialHelp .nt-help-label {
+  padding: 7px 11px;
+  border-radius: 8px;
+  background: rgba(28, 29, 34, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font: 500 12px 'IBM Plex Sans', sans-serif;
+  color: rgba(255, 255, 255, 0.8);
+}
+#navTutorialHelp .nt-help-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(28, 29, 34, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font: 600 18px 'IBM Plex Sans', sans-serif;
+  cursor: pointer;
+  padding: 0;
+}
+#navTutorialHelp .nt-help-btn:hover { background: rgba(255, 255, 255, 0.16); }
