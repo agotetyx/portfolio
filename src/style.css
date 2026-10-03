@@ -400,8 +400,12 @@ border-radius: 10%;
   transform: scale(1.1);   /* scale up the SVG */
   transition: transform 0.2s ease;
 }
+#chatToggleBtn {
+  transition: box-shadow 0.3s ease;
+}
 #chatToggleBtn:hover {
   background: #01ffa2bc;
+  box-shadow: 0 0 12px 4px rgba(160, 90, 255, 0.7), 0 0 24px 8px rgba(0, 220, 255, 0.45);
 }
 #chatToggleBtn img {
   width: 100%;
