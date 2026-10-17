@@ -340,6 +340,20 @@ document.addEventListener('keydown', (e) => {
 });
 document.getElementById('closePanelBtn').addEventListener('click', closePanel);
 
+// Click outside the panel closes it. Capture phase runs before other handlers, so a click
+// on another object or a menu item closes then immediately reopens with the new content.
+// Drags (orbiting the camera) are ignored so you can look around while reading.
+let pointerDownAt = null;
+document.addEventListener('pointerdown', (e) => {
+  pointerDownAt = { x: e.clientX, y: e.clientY };
+}, true);
+document.addEventListener('click', (e) => {
+  if (!document.body.classList.contains('panel-open')) return;
+  if (infoPanel.contains(e.target)) return;
+  if (pointerDownAt && Math.hypot(e.clientX - pointerDownAt.x, e.clientY - pointerDownAt.y) > 5) return;
+  closePanel();
+}, true);
+
 ['mousedown', 'wheel'].forEach(event =>
   window.addEventListener(event, () => { if (paused) paused = false; })
 );
