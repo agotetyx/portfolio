@@ -126,7 +126,7 @@ export function initNavTutorial(sceneEl) {
     <div class="nt-body">
       <div class="nt-row">
         <div class="nt-eyebrow"></div>
-        <div class="nt-status"></div>
+        <button class="nt-close" aria-label="Close navigation controls">✕</button>
       </div>
       <div class="nt-title"></div>
       <div class="nt-sub"></div>
@@ -136,20 +136,13 @@ export function initNavTutorial(sceneEl) {
           <div class="nt-dots">${SLIDES.map((s, i) => `<button class="nt-dot" data-i="${i}" aria-label="${s.name}"></button>`).join('')}</div>
           <button class="nt-arrow nt-next" aria-label="Next">${CHEVRON_RIGHT}</button>
         </div>
-        <button class="nt-close"></button>
       </div>
     </div>`;
 
-  const help = document.createElement('div');
-  help.id = 'navTutorialHelp';
-  help.innerHTML = `
-    <div class="nt-help-label">Navigation controls</div>
-    <button class="nt-help-btn" aria-label="Navigation controls">?</button>`;
-
-  document.body.append(card, help);
+  document.body.append(card);
 
   // Keep UI clicks from reaching the scene's raycast click handler on window
-  [card, help].forEach((n) => n.addEventListener('click', (e) => e.stopPropagation()));
+  card.addEventListener('click', (e) => e.stopPropagation());
 
   const svg = card.querySelector('svg');
   const $ = (sel) => card.querySelector(sel);
@@ -168,15 +161,11 @@ export function initNavTutorial(sceneEl) {
   function renderText() {
     const cur = SLIDES[slide], isDone = done[slide];
     $('.nt-eyebrow').textContent = `${cur.name.toUpperCase()} · ${slide + 1}/3`;
-    const status = $('.nt-status');
-    status.textContent = isDone ? 'DONE' : 'TRY IT IN THE SCENE';
-    status.style.color = isDone ? OK : 'rgba(255,255,255,0.45)';
     $('.nt-title').textContent = isDone ? cur.done : cur.title;
     $('.nt-sub').textContent = cur.sub;
     const prev = $('.nt-prev');
     prev.disabled = slide === 0;
     prev.style.opacity = slide === 0 ? 0.35 : 1;
-    $('.nt-close').textContent = slide === 2 ? 'Done' : 'Skip';
     dots.forEach((d, i) => {
       d.style.width = i === slide ? '20px' : '6px';
       d.style.background = i === slide ? '#fff' : done[i] ? OK : 'rgba(255,255,255,0.3)';
@@ -223,7 +212,6 @@ export function initNavTutorial(sceneEl) {
     goTo(0);
     open = true;
     card.classList.add('nt-open');
-    help.classList.remove('nt-open');
     if (!raf) raf = requestAnimationFrame(tick);
   }
 
@@ -232,7 +220,6 @@ export function initNavTutorial(sceneEl) {
     open = false;
     drag = null;
     card.classList.remove('nt-open');
-    help.classList.add('nt-open');
     cancelAnimationFrame(raf);
     raf = null;
     try { localStorage.setItem(STORAGE_KEY, '1'); } catch {}
@@ -255,7 +242,6 @@ export function initNavTutorial(sceneEl) {
   $('.nt-next').addEventListener('click', () => (slide < 2 ? goTo(slide + 1) : hide()));
   $('.nt-close').addEventListener('click', hide);
   dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
-  help.querySelector('.nt-help-btn').addEventListener('click', show);
 
   // Gesture detection on the real scene canvas (alongside OrbitControls)
   sceneEl.addEventListener('pointerdown', (e) => {
@@ -275,6 +261,8 @@ export function initNavTutorial(sceneEl) {
 
   let seen = false;
   try { seen = localStorage.getItem(STORAGE_KEY) === '1'; } catch {}
-  if (seen) help.classList.add('nt-open');
-  else show();
+  if (!seen) show();
+
+  // Opened from the scene dock's "?" button
+  return { toggle: () => (open ? hide() : show()) };
 }

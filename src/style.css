@@ -106,263 +106,68 @@ canvas {
   100% { transform: rotate(360deg); }
 }
 
-  #infoPanel {
-  position: fixed;
-  top: 0;
-  right: -100%; /* hide off-screen initially */
-  width: 33.33vw;
-  height: 100vh;
-  background: rgba(17, 17, 17, 0.75);
-  color: white;
-  padding: 2rem;
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
-  transition: right 0.4s ease;
-  z-index: 100;
-  overflow-y: auto;
-}
-#panelDescription {
-  padding-bottom: 2rem; /* or however much space you want */
-}
-
-#infoPanel img,
-#infoPanel video {
-  width: 100%;
-  height: fit-content;
-  margin: 1rem 0;
-  border-radius: 10px;
-  object-fit: cover;
-  max-height: 50vh;
-}
-
-#infopanel p {
-  padding-bottom: 50rem;
-}
-
-.panel-buttons {
-  position: sticky;
-  display: flex;
-  gap: 1rem;
-  padding-bottom: 0.1rem;
-}
-
-.panel-buttons button {
-  
-  flex: 1;
-  padding: 0.75rem;
-  font-size: 1rem;
-  background: #444;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.panel-buttons button:hover {
-  background: #666;
-}
-#closePanelBtn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  cursor: pointer;
-  text-align: left;
-  padding: 0;
-}
-
-#closePanelBtn:hover {
-  color: #aaa;
-}
-
+/* Hero: centred on the visible scene, same axis as the bar and dock */
 #introText {
   position: fixed;
-  
-  width: 100%;
-  height: 100%;
+  top: clamp(90px, calc(35px + 9vh), 110px); /* bar ends ~70px; half the old gap below it */
+  left: 0;
+  right: var(--panel-w);
   z-index: 200;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   color: white;
-  font-family: 'elevon', sans-serif;
   pointer-events: none;
-}
-
-
-#introText p {
-  font-size: 3vw;
-  margin-top: 1rem;
-  font-weight: 300;
-  margin-bottom: 1rem;
-  transition: opacity 2s ease;
-  
-}
-#introText p2 {
-  font-size: 1.5vw;
-  margin-top: 0;
-  font-weight: 300;
-  transition: opacity 2s ease;
-  
+  transition: right 0.45s var(--nav-ease);
 }
 #introNameWrap {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-weight: bold;
-  
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0 0.25em;
+  font-weight: 800;
+  font-size: clamp(44px, 5.3vw, 76px);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
 }
-#nameTitle {
-  display: inline-block;
-  font-size: 6vw;
+#introText p {
+  margin: 14px 0 0;
+  font-size: clamp(18px, 1.9vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.82);
   transition: opacity 2s ease;
 }
+#nameTitle,
+#namePrefix { transition: opacity 2s ease; }
 
-#logoFade {
-   position: absolute;
-  width: 300px;
-  height: auto;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 5s ease;
-  top: -4.5rem;
-  left: -4.5rem;
-}
-
-#logofade:hover{
-  opacity: 1;
-  visibility: visible;
-}
-
-
-#namePrefix {
-  margin-right: 0.5rem;
-  opacity: 1;
-  transition: opacity 2s ease;
-   font-size: 6vw;
-}
-
-
-#infoToggle {
+/* "Click any object to begin" — mono hint just above the dock */
+#clickHint {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #ffffff11;
-  border: 1px solid #888;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  line-height: 40px;
-  cursor: pointer;
-  z-index: 300;
-  transition: background 0.3s ease;
-}
-
-#infoToggle:hover {
-  background: #ffffff33;
-}
-
-#infoPanelMini {
-  position: fixed;
-  top: 70px;
-  right: 20px;
-  width: 200px;
-  background: #111;
-  color: white;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  z-index: 299;
-  font-size: 0.95rem;
-  line-height: 1.6;
-
-  opacity: 0;
-  transform: translateY(-10px);
+  bottom: 84px;
+  left: calc((100vw - var(--panel-w)) / 2);
+  transform: translateX(-50%);
+  z-index: 200;
+  font: 500 12px 'IBM Plex Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.55);
   pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: left 0.45s var(--nav-ease), opacity 0.4s ease;
 }
-
-#infoPanelMini.show {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-#infoPanelMini a {
-  color: #88ccff;
-  text-decoration: none;
-}
-
-#infoPanelMini a:hover {
-  text-decoration: underline;
-}
-
-
-.social-links {
-  display: flex;
-  gap: 15px;
-  margin: 1rem 0;
-  font-size: 1.5rem;
-}
-
-.social-links a {
-  color: #fff;
-  transition: color 0.3s ease;
-}
-
-.social-links a:hover {
-  color: #88ccff;
-}
-
-.resume-link {
-  background: #222;
-  color: white;
-  border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 1rem;
-  width: 100%;
-  font-size: 1rem;
-  text-align: center;
-}
-.resume-link:hover {
-  background: #444;
-}
-
-.reset-camera {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  padding: 0.75rem 1.2rem;
-  background: #222;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  z-index: 999;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  transition: background 0.3s ease;
-}
-.reset-camera:hover {
-  background: #444;
-}
+#clickHint.hidden,
+body:has(#navTutorial.nt-open) #clickHint { opacity: 0; }
 
 /* Global Orbitron targets */
 button,
-.panel-buttons button,
-#infoToggle,
-#closePanelBtn,
 #introText,
 #introText *,
 h1, h2, h3,
-#panelTitle,
-#panelSubtitle,
-.resume-link {
+#infoPanel {
   font-family: 'Cal Sans', sans-serif;
 }
 
@@ -534,12 +339,12 @@ h1, h2, h3,
 /* ---------- Navigation tutorial ---------- */
 #navTutorial {
   position: fixed;
-  left: 50%;
-  bottom: 28px;
+  left: calc((100vw - var(--panel-w)) / 2);
+  bottom: 82px; /* sits just above #sceneDock */
   transform: translate(-50%, 12px);
   width: 50vw;
   min-width: 560px;
-  max-width: calc(100% - 48px);
+  max-width: calc(100vw - var(--panel-w) - 48px);
   padding: 14px;
   box-sizing: border-box;
   display: flex;
@@ -554,10 +359,10 @@ h1, h2, h3,
   font-family: 'IBM Plex Sans', sans-serif;
   color: #f5f5f7;
   user-select: none;
-  z-index: 90; /* below #infoPanel so it slides over */
+  z-index: 350; /* above the dock, below #infoPanel */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 250ms ease, transform 250ms ease, visibility 250ms;
+  transition: opacity 250ms ease, transform 250ms ease, visibility 250ms, left 0.45s var(--nav-ease);
 }
 #navTutorial.nt-open {
   opacity: 1;
@@ -589,12 +394,11 @@ h1, h2, h3,
   align-items: center;
   gap: 8px;
 }
-#navTutorial .nt-eyebrow,
-#navTutorial .nt-status {
+#navTutorial .nt-eyebrow {
   font: 500 11px 'IBM Plex Mono', monospace;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.6);
 }
-#navTutorial .nt-eyebrow { letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.6); }
-#navTutorial .nt-status { letter-spacing: 0.06em; }
 #navTutorial .nt-title {
   font-size: 22px;
   font-weight: 600;
@@ -641,48 +445,440 @@ h1, h2, h3,
   transition: all 250ms;
 }
 #navTutorial .nt-close {
-  border: 0;
-  background: transparent;
-  padding: 6px 2px;
-  font: 500 13px 'IBM Plex Sans', sans-serif;
-  color: rgba(255, 255, 255, 0.62);
-  cursor: pointer;
-}
-#navTutorial .nt-close:hover { color: #fff; }
-
-/* Help "?" button — stacked above Reset Camera */
-#navTutorialHelp {
-  position: fixed;
-  right: 1rem;
-  bottom: calc(1rem + 58px);
-  display: none;
-  align-items: center;
-  gap: 10px;
-  z-index: 999;
-  font-family: 'IBM Plex Sans', sans-serif;
-}
-#navTutorialHelp.nt-open { display: flex; }
-#navTutorialHelp .nt-help-label {
-  padding: 7px 11px;
-  border-radius: 8px;
-  background: rgba(28, 29, 34, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font: 500 12px 'IBM Plex Sans', sans-serif;
-  color: rgba(255, 255, 255, 0.8);
-}
-#navTutorialHelp .nt-help-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(28, 29, 34, 0.55);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: #fff;
-  font: 600 18px 'IBM Plex Sans', sans-serif;
-  cursor: pointer;
+  flex: none;
+  width: 28px;
+  height: 28px;
   padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
 }
-#navTutorialHelp .nt-help-btn:hover { background: rgba(255, 255, 255, 0.16); }
+#navTutorial .nt-close:hover { background: rgba(255, 255, 255, 0.16); color: #fff; }
+
+/* ---------- Layout: bar + dock centre on the visible scene ---------- */
+:root {
+  --panel-w: 0px; /* panel width + 14px gap each side while open */
+  --nav-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+body.panel-open { --panel-w: 468px; }
+
+/* Shared liquid-glass layer. Lives on a child (not the container) so nested
+   dropdowns can still blur the page behind them. */
+.tn-glass {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015)), rgba(8, 8, 12, 0.6);
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(255, 255, 255, 0.05), 0 18px 50px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+/* ---------- Top menu bar ---------- */
+#topNav {
+  position: fixed;
+  top: 24px;
+  left: calc((100vw - var(--panel-w)) / 2);
+  transform: translateX(-50%);
+  transition: left 0.45s var(--nav-ease);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
+  border-radius: 999px;
+  isolation: isolate;
+  z-index: 500;
+  color: #fff;
+  font-family: 'Cal Sans', sans-serif;
+  font-synthesis-weight: none;
+}
+#topNav .tn-item { position: relative; }
+#topNav .tn-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font: 500 14px/1.2 'Cal Sans', sans-serif;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+#topNav .tn-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+#topNav .tn-item.open > .tn-btn { color: #fff; background: rgba(255, 255, 255, 0.12); }
+#topNav button:focus-visible,
+#topNav a:focus-visible,
+#sceneDock button:focus-visible,
+#infoPanel button:focus-visible,
+#infoPanel a:focus-visible {
+  outline: 2px solid rgba(247, 185, 85, 0.8);
+  outline-offset: 2px;
+}
+#topNav .tn-caret { font-size: 10px; opacity: 0.6; transition: transform 0.2s; }
+#topNav .tn-item.open .tn-chev { transform: rotate(180deg); }
+#topNav .tn-work { display: none; }
+
+/* ---------- Dropdowns ---------- */
+#topNav .tn-menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 0;
+  width: 330px;
+  padding: 8px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  isolation: isolate;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.16s ease-out, transform 0.16s ease-out, visibility 0s 0.16s;
+}
+#topNav .tn-menu-right { left: auto; right: 0; }
+#topNav .tn-item.open > .tn-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.16s ease-out, transform 0.16s ease-out, visibility 0s;
+}
+#topNav .tn-menu > .tn-glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015)), rgba(8, 8, 12, 0.82);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+#topNav .tn-list { list-style: none; margin: 0; padding: 0; }
+#topNav .tn-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 13px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+#topNav .tn-row:hover,
+#topNav .tn-row:focus-visible { background: rgba(255, 255, 255, 0.07); }
+#topNav .tn-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+#topNav .tn-title { font-size: 15px; font-weight: 600; }
+#topNav .tn-sub { font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-top: 2px; }
+#topNav .tn-tag {
+  flex: none;
+  font: 500 10px 'IBM Plex Mono', monospace;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 3px 7px;
+  border-radius: 6px;
+}
+#topNav .tn-icon { flex: none; width: 20px; text-align: center; font-size: 17px; color: rgba(255, 255, 255, 0.85); }
+#topNav .tn-foot {
+  margin: 6px 6px 2px;
+  padding: 12px 8px 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+#topNav .tn-foot-split { justify-content: space-between; }
+#topNav .tn-fly {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: #f7c877;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+#topNav .tn-fly:hover { text-decoration: underline; text-underline-offset: 3px; }
+#topNav .tn-group + .tn-group { margin-top: 4px; }
+#topNav .tn-cat .tn-group-label { padding-top: 8px; }
+#topNav .tn-group-label {
+  padding: 10px 14px 4px;
+  font: 500 10px 'IBM Plex Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f7b955;
+}
+
+/* ---------- Scene dock ---------- */
+#sceneDock {
+  position: fixed;
+  bottom: 22px;
+  left: calc((100vw - var(--panel-w)) / 2);
+  transform: translateX(-50%);
+  transition: left 0.45s var(--nav-ease);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 999px;
+  white-space: nowrap;
+  isolation: isolate;
+  z-index: 300;
+  color: #fff;
+  font-family: 'Cal Sans', sans-serif;
+  font-synthesis-weight: none;
+}
+#sceneDock > .tn-glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.015)), rgba(8, 8, 12, 0.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 14px 40px rgba(0, 0, 0, 0.55);
+}
+#sceneDock button {
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  font: 600 13px 'Cal Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+#sceneDock button { padding: 0 14px; background: rgba(255, 255, 255, 0.1); }
+#sceneDock button:hover { background: rgba(255, 255, 255, 0.18); }
+
+/* ---------- Info / About panel (liquid glass) ---------- */
+#infoPanel {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  bottom: 14px;
+  width: 440px;
+  box-sizing: border-box;
+  padding: 22px;
+  border-radius: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  background: linear-gradient(200deg, rgba(255, 180, 90, 0.1), rgba(255, 255, 255, 0.02) 35%, rgba(255, 255, 255, 0.03)), rgba(8, 7, 10, 0.5);
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  border: 1px solid rgba(255, 220, 170, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 235, 200, 0.3), 0 30px 70px rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-synthesis-weight: none;
+  z-index: 400;
+  transform: translateX(480px);
+  visibility: hidden;
+  transition: transform 0.45s var(--nav-ease), visibility 0s 0.45s;
+}
+body.panel-open #infoPanel {
+  transform: none;
+  visibility: visible;
+  transition: transform 0.45s var(--nav-ease), visibility 0s;
+}
+#infoPanel > * { flex: none; }
+#infoPanel .ip-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+#infoPanel .ip-eyebrow {
+  font: 500 11px 'IBM Plex Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f7b955;
+}
+#panelTitle {
+  margin: 4px 0 0;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+#infoPanel .ip-close {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+#infoPanel .ip-close:hover { border-color: #f7b955; color: #f7c877; }
+
+/* Accretion-glow primary button with a slowly rotating ring */
+@property --ip-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 210deg;
+}
+@keyframes ip-ring { to { --ip-angle: 570deg; } }
+#infoPanel .ip-actions { display: flex; gap: 10px; }
+#infoPanel .ip-primary {
+  flex: 1;
+  height: 50px;
+  border-radius: 14px;
+  border: 1.5px solid transparent;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  background:
+    linear-gradient(#141018, #0c0a0e) padding-box,
+    conic-gradient(from var(--ip-angle), #ff8a3c, #fff2d4, #ff6a2b, #ffd27a, #ff8a3c) border-box;
+  box-shadow: 0 0 26px rgba(255, 150, 60, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: box-shadow 0.25s;
+  animation: ip-ring 8s linear infinite;
+}
+#infoPanel .ip-primary:hover { box-shadow: 0 0 40px rgba(255, 150, 60, 0.55), inset 0 0 20px rgba(255, 150, 60, 0.15); }
+#infoPanel .ip-arrow { color: #f7c877; }
+#infoPanel .ip-secondary {
+  flex: 1;
+  height: 50px;
+  padding: 0 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+#infoPanel .ip-secondary:hover { border-color: #f7b955; color: #f7c877; }
+#infoPanel .ip-link {
+  align-self: flex-start;
+  margin-top: -4px;
+  font-size: 14px;
+  color: #f7c877;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(247, 185, 85, 0.4);
+}
+#panelSubtitle,
+#panelDescription p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  text-wrap: pretty;
+}
+#panelImage,
+#panelVideo {
+  width: 100%;
+  border-radius: 18px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(255, 200, 140, 0.18);
+}
+#panelImage { height: 220px; }
+#panelVideo { height: auto; }
+#panelDescription ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#panelDescription li {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
+}
+#panelDescription li::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: #f7b955;
+  box-shadow: 0 0 8px #f7b955;
+}
+
+/* ---------- Responsive ---------- */
+/* Tablet: panel overlays the scene, tucked between the bar and the dock */
+@media (min-width: 768px) and (max-width: 1000px) {
+  body.panel-open { --panel-w: 0px; }
+  #infoPanel { top: 76px; bottom: 80px; }
+}
+
+/* Phone: bar collapses to About · Resume · Work · ☰, panel becomes a bottom sheet */
+@media (max-width: 767px) {
+  body.panel-open { --panel-w: 0px; }
+  #topNav {
+    top: 12px;
+    left: 0;
+    right: 0;
+    width: max-content;
+    max-width: calc(100vw - 24px);
+    margin: 0 auto;
+    transform: none;
+  }
+  #topNav .tn-btn { padding: 9px 12px; }
+  #topNav .tn-cat { display: none; }
+  #topNav .tn-work { display: block; }
+  /* No transform on the bar here, so fixed menus anchor to the viewport */
+  #topNav .tn-menu,
+  #topNav .tn-menu-right {
+    position: fixed;
+    top: 68px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+  #topNav .tn-scroll { max-height: calc(100vh - 170px); overflow-y: auto; }
+  #introText { top: 76px; padding: 0 16px; }
+  #introNameWrap { font-size: clamp(36px, 10vw, 48px); }
+  #introText p { font-size: 17px; }
+  #infoPanel {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    max-height: 85vh;
+    border-radius: 26px 26px 0 0;
+    transform: translateY(100%);
+  }
+  #navTutorial { min-width: 0; }
+}
+
+/* Short viewports: keep the hero clear of the black hole */
+@media (max-height: 640px) {
+  #introText p { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #topNav,
+  #sceneDock,
+  #introText,
+  #clickHint { transition: none; }
+  #topNav .tn-menu,
+  #topNav .tn-item.open > .tn-menu { transform: none; }
+  #infoPanel {
+    transform: none;
+    opacity: 0;
+    transition: opacity 0.2s, visibility 0s 0.2s;
+  }
+  body.panel-open #infoPanel {
+    opacity: 1;
+    transition: opacity 0.2s, visibility 0s;
+  }
+  #infoPanel .ip-primary { animation: none; }
+}

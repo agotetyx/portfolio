@@ -23,51 +23,41 @@
 
     <canvas id="bg"></canvas>
 
-    <!-- Intro Text (top-left corner) -->
+    <!-- Intro Text (centred on the scene) -->
 <div id="introText">
   <div id="introNameWrap">
-    <img id="logoFade" src="/AGLogo.png" alt="AG Logo" />
     <span id="namePrefix">I am</span>
     <span id="nameTitle">Anurag Gotety</span>
   </div>
   <p>Welcome to my universe</p>
-  <p2 style="font-style: italic; opacity: 0.8;">Click any object to begin.</p2>
 </div>
+<div id="clickHint">Click any object to begin</div>
 
 
-    <!-- Hamburger toggle -->
-    <div id="infoToggle">&#9776;</div>
-
-    <!-- Social Panel (hamburger menu) -->
-    <div id="infoPanelMini">
-      <p><strong>Connect with me</strong></p>
-      <div class="social-links">
-        <a href="https://linkedin.com/in/anurag-gotety" target="_blank"><i class="fab fa-linkedin"></i></a>
-        <a href="mailto:anurag10gotety@gmail.com"><i class="fas fa-envelope"></i></a>
-        <a href="https://www.youtube.com/@anuraggotety7680/videos" target="_blank"><i class="fab fa-youtube"></i></a>
-        <a href="https://www.instagram.com/goat80_productions/" target="_blank"><i class="fab fa-instagram"></i></a>
-      </div>
-    <button id="downloadResumeBtn" class="resume-link">Download Resume</button>
-</div>
 <div id="loadingSpinner">
   <div class="spinner"></div>
   <p>Loading 3D assets...</p>
 </div>
 
-    <!-- Info Panel for clicked project -->
-    <div id="infoPanel">
-      <button id="closePanelBtn">← Close</button>
-      <h2 id="panelTitle">Project</h2>
-      <div class="panel-buttons">
-        <button id="seeMoreBtn">See More</button>
-        <button id="playGameBtn">Play Game</button>
+    <!-- Info Panel for clicked project / About -->
+    <aside id="infoPanel" role="dialog" aria-label="About" aria-hidden="true">
+      <div class="ip-head">
+        <div>
+          <div id="panelEyebrow" class="ip-eyebrow">About</div>
+          <h2 id="panelTitle">Project</h2>
+        </div>
+        <button id="closePanelBtn" class="ip-close" aria-label="Close panel">✕</button>
       </div>
+      <div class="ip-actions">
+        <button id="panelPrimaryBtn" class="ip-primary"></button>
+        <button id="panelSecondaryBtn" class="ip-secondary"></button>
+      </div>
+      <a id="panelResumeLink" class="ip-link" href="/resume/AnuragGotety_resume.pdf" target="_blank" rel="noopener">View in new tab ↗</a>
       <p id="panelSubtitle">Short description line.</p>
       <img id="panelImage" src="" alt="Project image" />
       <video id="panelVideo" autoplay muted loop playsinline style="display:none"></video>
-      <p id="panelDescription">Longer paragraph about the project...</p>
-      
-    </div>
+      <div id="panelDescription">Longer paragraph about the project...</div>
+    </aside>
 
     <script type="module" src="/src/main.js"></script>
 <!-- Chat Toggle Button -->
@@ -89,7 +79,6 @@
 </div>
 
 </div>
-<button id="resetCameraBtn" class="reset-camera">Reset Camera</button>
 
   </body>
 </html>

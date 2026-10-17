@@ -8,13 +8,11 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { initNavTutorial } from './navTutorial.js';
+import { initTopNav, downloadResume } from './topNav.js';
 
 let hoverLight = null;
 let hoverHelper = null;
 let sunHoverLight = null;
-document.getElementById('downloadResumeBtn').onclick = () => {
-  window.open('/resume/AnuragGotety_resume.pdf', '_blank');
-};
 
 const scene = new THREE.Scene();
 scene.background = new THREE.TextureLoader().load(`/images/spacetexture.jpg`);
@@ -143,7 +141,9 @@ Promise.all(assetPromises).then(loadedProjects => {
   document.getElementById('loadingSpinner').style.display = 'none';
 });
 
-Promise.all([sunPromise, ...assetPromises]).then(() => initNavTutorial(renderer.domElement));
+const sceneReady = Promise.all([sunPromise, ...assetPromises]);
+let navTutorial = null;
+sceneReady.then(() => { navTutorial = initNavTutorial(renderer.domElement); });
 
 
 Promise.all(assetPromises).then(loadedProjects => {
@@ -173,7 +173,10 @@ let hoverTarget = null;
 let lastHoveredProject = null;
 
 // Click
-window.addEventListener('click', async (event) => {
+window.addEventListener('click', (event) => {
+  // Only raycast clicks that land on the scene itself, not on the UI above it
+  if (event.target !== renderer.domElement) return;
+
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
@@ -198,6 +201,23 @@ window.addEventListener('click', async (event) => {
 
   if (!obj) return;
 
+  focusObject(obj);
+});
+
+// Eyebrow label shown above the panel title
+const PANEL_CATEGORY = {
+  'Anurag Gotety': 'About',
+  'ARDI': 'Software Development',
+  'Portal Defender': 'Games',
+  'Yaoshi': 'Games',
+  'Erin and the Otherworld': 'Games',
+  'My Films': 'Films',
+  'Taffy': 'Good dog'
+};
+
+// Fly the camera to a scene object and open its info panel (same as clicking it)
+function focusObject(obj) {
+  dismissClickHint();
   focusedProject = obj;
   paused = true;
 
@@ -208,7 +228,9 @@ window.addEventListener('click', async (event) => {
     : projectData.find(p => p.title === obj.name);
 
   if (match) {
+    document.getElementById('panelEyebrow').textContent = PANEL_CATEGORY[match.title] || 'Project';
     document.getElementById('panelTitle').textContent = match.title;
+    infoPanel.setAttribute('aria-label', match.title === 'Anurag Gotety' ? 'About' : match.title);
     document.getElementById('panelSubtitle').textContent = match.short;
     const panelImage = document.getElementById('panelImage');
 
@@ -240,42 +262,83 @@ if (Array.isArray(match.long)) {
   });
   descElem.appendChild(ul);
 } else {
-  descElem.textContent = match.long;
+  const p = document.createElement('p');
+  p.textContent = match.long;
+  descElem.appendChild(p);
 }
 
-    const btn1 = document.getElementById('seeMoreBtn');
-const btn2 = document.getElementById('playGameBtn');
+const isAbout = match.title === 'Anurag Gotety';
+const primaryBtn = document.getElementById('panelPrimaryBtn');
+const secondaryBtn = document.getElementById('panelSecondaryBtn');
+document.getElementById('panelResumeLink').style.display = isAbout ? '' : 'none';
 
-btn1.textContent = match.button1 || 'See More';
-btn2.textContent = match.button2 || 'Play Game';
+if (isAbout) {
+  primaryBtn.innerHTML = 'Download Resume <span class="ip-arrow">↓</span>';
+  primaryBtn.style.display = '';
+  primaryBtn.onclick = downloadResume;
+  secondaryBtn.style.display = 'none';
+} else {
+  // First linked button gets the glow treatment, the second is a quiet ghost button
+  const actions = [
+    [match.button1, match.button1Link],
+    [match.button2, match.button2Link]
+  ].filter(([label, link]) => label && link);
 
-btn1.style.display = match.button1Link ? 'inline-block' : 'none';
-btn2.style.display = match.button2Link ? 'inline-block' : 'none';
-
-btn1.onclick = () => {
-  if (match.button1Link) window.open(match.button1Link, '_blank');
-};
-
-btn2.onclick = () => {
-  if (match.button2Link) window.open(match.button2Link, '_blank');
-};
+  [primaryBtn, secondaryBtn].forEach((btn, i) => {
+    const action = actions[i];
+    btn.style.display = action ? '' : 'none';
+    if (!action) return;
+    btn.innerHTML = i === 0 ? `${action[0]} <span class="ip-arrow">↗</span>` : action[0];
+    btn.onclick = () => window.open(action[1], '_blank', 'noopener');
+  });
+}
+document.querySelector('#infoPanel .ip-actions').style.display =
+  primaryBtn.style.display === 'none' ? 'none' : '';
 
   }
 
   const target = obj.getWorldPosition(new THREE.Vector3());
   orbitTargetPosition = target.clone();
   cameraTargetPosition = target.clone().add(new THREE.Vector3(-20, 5, 20));
-  document.getElementById('infoPanel').style.right = '0';
-});
+  openPanel();
+}
+
+// Focus a scene object by its project title (used by the top menu bar)
+async function focusByTitle(title) {
+  await sceneReady;
+  const obj = title === 'Anurag Gotety'
+    ? window.sunWrapper
+    : projects.find(p => p.mesh.name === title)?.mesh;
+  if (obj) focusObject(obj);
+}
+
+const infoPanel = document.getElementById('infoPanel');
+
+// "Click any object to begin" hint above the dock: hidden for good after the first focus
+const CLICK_HINT_KEY = 'clickHintSeen';
+const clickHint = document.getElementById('clickHint');
+try { if (localStorage.getItem(CLICK_HINT_KEY) === '1') clickHint.classList.add('hidden'); } catch {}
+
+function dismissClickHint() {
+  clickHint.classList.add('hidden');
+  try { localStorage.setItem(CLICK_HINT_KEY, '1'); } catch {}
+}
+
+function openPanel() {
+  topNav.closeMenus();
+  document.body.classList.add('panel-open');
+  infoPanel.setAttribute('aria-hidden', 'false');
+}
+
+function closePanel() {
+  document.body.classList.remove('panel-open');
+  infoPanel.setAttribute('aria-hidden', 'true');
+}
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    document.getElementById('infoPanel').style.right = '-100%';
-  }
+  if (e.key === 'Escape') closePanel();
 });
-document.getElementById('closePanelBtn').addEventListener('click', () => {
-  document.getElementById('infoPanel').style.right = '-100%';
-});
+document.getElementById('closePanelBtn').addEventListener('click', closePanel);
 
 ['mousedown', 'wheel'].forEach(event =>
   window.addEventListener(event, () => { if (paused) paused = false; })
@@ -426,46 +489,13 @@ function animate() {
   composer.render();
 
 }
-const infoToggle = document.getElementById('infoToggle');
-const infoPanelMini = document.getElementById('infoPanelMini');
-const resetCameraBtn = document.getElementById('resetCameraBtn');
-
-const infoVisible = infoToggle.style.right === '0px';
-resetCameraBtn.style.display = infoVisible ? 'none' : 'block';
-infoPanelMini.style.display = infoVisible ? 'none' : 'block';
-
-
-
-infoToggle.addEventListener('click', () => {
-  infoPanelMini.classList.toggle('show');
-});
-
+// Fade the hero and the "Click any object" hint out after 90 seconds
 setTimeout(() => {
-  const intro = document.getElementById('introText');
-  const logo = document.getElementById('logoFade');
-  const prefix = document.getElementById('namePrefix');
-  const name = document.getElementById('nameTitle');
-  const pTags = document.querySelectorAll('#introText p, #introText p2');
-  const p = document.getElementById('#introText p');
-  const p2 = document.getElementById('#introText p2');
-
-
-  // Animate name + reveal logo
-  setTimeout(() => {
-    logo.style.visibility = 'visible';
-    requestAnimationFrame(() => {
-
-        prefix.style.opacity = 0;
-     
-      name.style.opacity = 0;
-     pTags.forEach(p => {
-  p.style.opacity = 0;
-  
-});
-     logo.style.opacity = 0.55;
-});
-  }, 1500);
-}, 150000);
+  document.querySelectorAll('#namePrefix, #nameTitle, #introText p, #clickHint').forEach((el) => {
+    el.style.transition = 'opacity 2s ease';
+    el.style.opacity = 0;
+  });
+}, 90000);
 
 const chatToggle = document.getElementById('chatToggleBtn');
 const chatOverlay = document.getElementById('chatOverlay');
@@ -483,9 +513,15 @@ chatClose.addEventListener('click', () => {
 
 animate();
 
-document.getElementById('resetCameraBtn').addEventListener('click', () => {
+function resetCamera() {
   cameraTargetPosition = new THREE.Vector3(120, 10, 0);
   orbitTargetPosition = new THREE.Vector3(0, 0, 0);
+}
+
+const topNav = initTopNav({
+  onFocus: focusByTitle,
+  onResetCamera: resetCamera,
+  onHelp: () => navTutorial?.toggle()
 });
 
 document.addEventListener('DOMContentLoaded', () => {
